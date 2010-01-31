@@ -9,8 +9,10 @@
 #import <UIKit/UIKit.h>
 #import "BitrisBoardView.h"
 
-@interface BitrisGameController : UIViewController {
+@interface BitrisGameController : UIViewController <BitrisBoardDelegate> {
     IBOutlet BitrisBoardView *gameBoard;
+    NSArray *allPieces;
+    NSMutableArray *remainingPieces;
 }
 @property(retain) IBOutlet BitrisBoardView *gameBoard;
 @end

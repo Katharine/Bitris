@@ -12,41 +12,12 @@
 @implementation BitrisGameController
 @synthesize gameBoard;
 
-/*
- // The designated initializer.  Override if you create the controller programmatically and want to perform customization that is not appropriate for viewDidLoad.
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
-        // Custom initialization
-    }
-    return self;
-}
-*/
+#pragma mark UIViewController
 
 - (void)viewDidAppear:(BOOL)animated {
-    [gameBoard renderBoardWithAnimation:0xAAAAAAA];
+    [gameBoard setDelegate:self];
+    [gameBoard renderBoardWithAnimation:0xAAAAAAAA];
 }
-
-
-/*
-// Implement loadView to create a view hierarchy programmatically, without using a nib.
-- (void)loadView {
-}
-*/
-
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
-}
-*/
-
-/*
-// Override to allow orientations other than the default portrait orientation.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
-*/
 
 - (void)didReceiveMemoryWarning {
     // Releases the view if it doesn't have a superview.
@@ -64,7 +35,42 @@
 
 - (void)dealloc {
     [super dealloc];
+    [gameBoard dealloc];
 }
 
+#pragma mark BitrisBoardDelegate
+
+- (void)touchedCellNumber:(ushort)cell {
+    NSLog(@"Touch started at %hu", cell);
+    BitrisPiece piece;
+    piece.bitmask = 6210;
+    piece.offset = 6;
+    [gameBoard previewPiece:piece atCell:cell];
+}
+
+- (void)confirmedCellNumber:(ushort)cell {
+    NSLog(@"Touch ended at %hu", cell);
+    BitrisPiece piece;
+    piece.bitmask = 6210;
+    piece.offset = 6;
+    [gameBoard clearPreviewOfPiece:piece atCell:cell];
+}
+
+- (void)movedFromCellNumber:(ushort)oldCell toCellNumber:(ushort)newCell {
+    NSLog(@"Moved from %hu to %hu", oldCell, newCell);
+    BitrisPiece piece;
+    piece.bitmask = 6210;
+    piece.offset = 6;
+    [gameBoard clearPreviewOfPiece:piece atCell:oldCell];
+    [gameBoard previewPiece:piece atCell:newCell];
+}
+
+- (void)abandonedCell:(ushort)cell {
+    NSLog(@"Abandoned cell %hu.", cell);
+    BitrisPiece piece;
+    piece.bitmask = 6210;
+    piece.offset = 6;
+    [gameBoard clearPreviewOfPiece:piece atCell:cell];
+}
 
 @end

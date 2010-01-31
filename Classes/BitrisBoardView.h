@@ -8,20 +8,26 @@
 
 #import <UIKit/UIKit.h>
 #import "BitrisCellView.h"
+#import "BitrisBoardDelegate.h"
+#import "BitrisPiece.h"
 
 
 @interface BitrisBoardView : UIView {
     NSArray *cells;
     NSUInteger currentBoard;
-    ushort currentCell;
+    short currentCell;
+    id<BitrisBoardDelegate> delegate;
 }
 
 - (void)createSubviews;
 - (void)renderBoardWithAnimation:(NSUInteger)board;
 - (void)finishRenderingAnimation:(NSString *)animation finished:(NSNumber *)finished withBoard:(NSUInteger)board;
-
+- (BOOL)setAlpha:(CGFloat)opacity onEmptyBitmask:(NSUInteger)bitmask;
+- (void)previewPiece:(BitrisPiece)piece atCell:(ushort)cell;
+- (void)clearPreviewOfPiece:(BitrisPiece)piece atCell:(ushort)cell;
 
 @property(assign) NSArray *cells;
 @property(readonly) NSUInteger currentBoard;
+@property(retain) id<BitrisBoardDelegate> delegate;
 
 @end

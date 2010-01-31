@@ -34,6 +34,8 @@
 		8978F2F51114E5DA000B3DE8 /* BitrisCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitrisCellView.m; sourceTree = "<group>"; };
 		8978F4FA11151317000B3DE8 /* BitrisGameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitrisGameController.h; sourceTree = "<group>"; };
 		8978F4FB11151317000B3DE8 /* BitrisGameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitrisGameController.m; sourceTree = "<group>"; };
+		8978F61C111521C3000B3DE8 /* BitrisBoardDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitrisBoardDelegate.h; sourceTree = "<group>"; };
+		8978F6E3111535A2000B3DE8 /* BitrisPiece.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitrisPiece.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Bitris-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Bitris-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -62,6 +64,8 @@
 				8978F2F51114E5DA000B3DE8 /* BitrisCellView.m */,
 				8978F4FA11151317000B3DE8 /* BitrisGameController.h */,
 				8978F4FB11151317000B3DE8 /* BitrisGameController.m */,
+				8978F61C111521C3000B3DE8 /* BitrisBoardDelegate.h */,
+				8978F6E3111535A2000B3DE8 /* BitrisPiece.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
