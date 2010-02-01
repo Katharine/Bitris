@@ -90,9 +90,9 @@
 }
 
 - (ushort)findCellNumberAtPoint:(CGPoint)location {
-	if(location.x > [self frame].size.width || location.y > [self frame].size.height) {
-		return -1;
-	}
+    if(location.x > [self frame].size.width || location.y > [self frame].size.height) {
+        return -1;
+    }
     short column = location.x / ([self frame].size.width / 5);
     short row = location.y / ([self frame].size.height / 5);
     return row * 5 + column + 1;
@@ -142,7 +142,7 @@
     int i;
     for(i = 1; i <= 25; ++i) {
         if((0x1 << i) & bitmask) {
-			CGFloat multiplier = ((0x1 << i) & currentBoard) ? 0.5 : 1.0;
+            CGFloat multiplier = ((0x1 << i) & currentBoard) ? 0.5 : 1.0;
             [(BitrisCellView *)[cells objectAtIndex:(i-1)] setAlpha:1 - ((1 - opacity) * multiplier)];
         }
     }
@@ -160,14 +160,14 @@
 
 - (BOOL)previewPiece:(BitrisPiece)piece atCell:(ushort)cell {
     NSUInteger positionedPiece = PIECE_TO_BOARD(piece, cell);
-	if(!ON_BOARD(positionedPiece)) return NO;
-	BOOL valid = [self setAlpha:0.0 onEmptyBitmask:positionedPiece];
-	if(valid) {
-		[self setBackgroundColor:[UIColor greenColor]];
-	} else {
-		[self setBackgroundColor:[UIColor redColor]];
-	}
-	return valid;
+    if(!ON_BOARD(positionedPiece)) return NO;
+    BOOL valid = [self setAlpha:0.0 onEmptyBitmask:positionedPiece];
+    if(valid) {
+        [self setBackgroundColor:[UIColor greenColor]];
+    } else {
+        [self setBackgroundColor:[UIColor redColor]];
+    }
+    return valid;
 }
 
 - (void)clearPreviewOfPiece:(BitrisPiece)piece atCell:(ushort)cell {
