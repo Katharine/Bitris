@@ -14,5 +14,8 @@
     NSArray *allPieces;
     NSMutableArray *remainingPieces;
 }
+
+- (ushort)guessIntendedCellForPiece:(BitrisPiece)piece atCell:(ushort)cell;
+
 @property(retain) IBOutlet BitrisBoardView *gameBoard;
 @end

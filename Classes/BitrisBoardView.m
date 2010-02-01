@@ -90,6 +90,9 @@
 }
 
 - (ushort)findCellNumberAtPoint:(CGPoint)location {
+	if(location.x > [self frame].size.width || location.y > [self frame].size.height) {
+		return -1;
+	}
     short column = location.x / ([self frame].size.width / 5);
     short row = location.y / ([self frame].size.height / 5);
     return row * 5 + column + 1;
@@ -123,13 +126,13 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
     currentCell = [self findCellNumberAtPoint:[(UITouch *)[touches anyObject] locationInView:self]];
-    if(currentCell < 25 && currentCell >= 0) {
+    if(currentCell <= 25 && currentCell > 0) {
         [delegate confirmedCellNumber:currentCell];
     }
 }
 
 - (void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event {
-    if(currentCell < 25 && currentCell >= 0) {
+    if(currentCell <= 25 && currentCell > 0) {
         if([delegate respondsToSelector:@selector(abandonedCell:)])
             [delegate abandonedCell:currentCell];
     }
@@ -139,34 +142,37 @@
     int i;
     for(i = 1; i <= 25; ++i) {
         if((0x1 << i) & bitmask) {
-            [(BitrisCellView *)[cells objectAtIndex:(i-1)] setAlpha:opacity];
+			CGFloat multiplier = ((0x1 << i) & currentBoard) ? 0.5 : 1.0;
+            [(BitrisCellView *)[cells objectAtIndex:(i-1)] setAlpha:1 - ((1 - opacity) * multiplier)];
         }
     }
     return ((~currentBoard & bitmask) == bitmask);
 }
 
-- (BOOL)previewPiece:(BitrisPiece)piece atCell:(ushort)cell {
-    NSUInteger positionedPiece = piece.bitmask << (cell + (32 - piece.offset));
-    if(positionedPiece > 0 && (positionedPiece & 2080374784) == 0 && 
-       (positionedPiece & 96) != 96 && (positionedPiece & 3072) != 3072 && (positionedPiece & 98304) != 98304 && 
-       (positionedPiece & 3145728) != 3145728 && (positionedPiece & 34) != 34 && (positionedPiece & 2080) != 2080 && 
-       (positionedPiece & 1088) != 1088 && (positionedPiece & 66560) != 66560 && (positionedPiece & 34816) != 34816 && 
-       (positionedPiece & 2129920) != 2129920 && (positionedPiece & 1114112) != 1114112 && 
-       (positionedPiece & 35651584) != 35651584) {
-        BOOL valid = [self setAlpha:0.0 onEmptyBitmask:positionedPiece];
-        if(valid) {
-            [self setBackgroundColor:[UIColor greenColor]];
-        } else {
-            [self setBackgroundColor:[UIColor redColor]];
+- (void)setAlpha:(CGFloat)opacity onBitmask:(NSUInteger)bitmask {
+    int i;
+    for(i = 1; i <= 25; ++i) {
+        if((0x1 << i) & bitmask) {
+            [(BitrisCellView *)[cells objectAtIndex:(i-1)] setAlpha:opacity];
         }
-        return valid;
     }
-    return NO;
+}
+
+- (BOOL)previewPiece:(BitrisPiece)piece atCell:(ushort)cell {
+    NSUInteger positionedPiece = PIECE_TO_BOARD(piece, cell);
+	if(!ON_BOARD(positionedPiece)) return NO;
+	BOOL valid = [self setAlpha:0.0 onEmptyBitmask:positionedPiece];
+	if(valid) {
+		[self setBackgroundColor:[UIColor greenColor]];
+	} else {
+		[self setBackgroundColor:[UIColor redColor]];
+	}
+	return valid;
 }
 
 - (void)clearPreviewOfPiece:(BitrisPiece)piece atCell:(ushort)cell {
-    NSUInteger positionedPiece = piece.bitmask << (cell + (32 - piece.offset));
-    [self setAlpha:1.0 onEmptyBitmask:positionedPiece];
+    NSUInteger positionedPiece = PIECE_TO_BOARD(piece, cell);
+    [self setAlpha:1.0 onBitmask:positionedPiece];
     [self setBackgroundColor:[UIColor yellowColor]];
 }
 
