@@ -12,7 +12,7 @@
 @implementation BitrisPiece
 @synthesize bitmask, offset;
 
-- (NSInteger)getBitmapForCell:(ushort)cell {
+- (NSInteger)getBitmaskForCell:(ushort)cell {
     return PIECE_TO_BOARD(self, cell);
 }
 

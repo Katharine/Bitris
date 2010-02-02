@@ -10,7 +10,7 @@
 
 
 @implementation BitrisGameController
-@synthesize gameBoard;
+@synthesize gameBoard, thisPieceView, nextPieceView;
 
 #pragma mark Stuff
 
@@ -86,6 +86,8 @@
     if(++currentPiece >= [allPieces count]) {
         currentPiece = 0;
     }
+    [thisPieceView displayPiece:[allPieces objectAtIndex:currentPiece]];
+    [nextPieceView displayPiece:[allPieces objectAtIndex:((currentPiece + 1) % [allPieces count])]];
 }
 
 #pragma mark UIViewController
@@ -94,6 +96,8 @@
     [gameBoard setDelegate:self];
     allPieces = [self loadBitrisPieces];
     [gameBoard renderBoardWithAnimation:0xAAAA];
+    [thisPieceView displayPiece:[allPieces objectAtIndex:currentPiece]];
+    [nextPieceView displayPiece:[allPieces objectAtIndex:((currentPiece + 1) % [allPieces count])]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -107,6 +111,8 @@
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
     self.gameBoard = nil;
+    self.nextPieceView = nil;
+    self.thisPieceView = nil;
 }
 
 
@@ -114,6 +120,8 @@
     [super dealloc];
     [gameBoard release];
     [allPieces release];
+    [thisPieceView release];
+    [nextPieceView release];
 }
 
 #pragma mark BitrisBoardDelegate

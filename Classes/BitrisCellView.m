@@ -37,7 +37,7 @@
     
     // Border
     CGContextSetStrokeColorWithColor(context, [[UIColor blackColor] CGColor]);
-    CGContextSetLineWidth(context, 5.0);
+    CGContextSetLineWidth(context, frame.size.width / 10.0);
     CGContextStrokeRect(context, rect);
 }
 

@@ -14,7 +14,6 @@
 
 - (void)createSubviews {
     CGRect frame = [self frame];
-    NSLog(@"BitrisBoardView subview creation.");
     NSMutableArray *mutableCells = [[[NSMutableArray alloc] init] autorelease];
     ushort i;
     int width = frame.size.width / 5;

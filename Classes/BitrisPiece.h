@@ -24,7 +24,7 @@
     ushort offset;
 }
 
-- (NSInteger)getBitmapForCell:(ushort)cell;
+- (NSInteger)getBitmaskForCell:(ushort)cell;
 
 @property(readonly) NSInteger bitmask;
 @property(readonly) ushort offset;

@@ -8,9 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "BitrisBoardView.h"
+#import "BitrisPieceView.h"
 
 @interface BitrisGameController : UIViewController <BitrisBoardDelegate> {
     IBOutlet BitrisBoardView *gameBoard;
+    IBOutlet BitrisPieceView *thisPieceView;
+    IBOutlet BitrisPieceView *nextPieceView;
     NSMutableArray *remainingPieces;
     NSArray *allPieces;
     NSInteger currentPiece;
@@ -21,4 +24,6 @@
 - (IBAction)nextPiece;
 
 @property(retain) IBOutlet BitrisBoardView *gameBoard;
+@property(retain) IBOutlet BitrisPieceView *thisPieceView;
+@property(retain) IBOutlet BitrisPieceView *nextPieceView;
 @end
