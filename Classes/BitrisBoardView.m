@@ -46,26 +46,7 @@
 }
 
 - (void)renderBoardWithAnimation:(NSUInteger)board {
-    int i;
-    [UIView beginAnimations:@"render" context:(void *)board];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [UIView setAnimationDuration:0.5];
-    for(i = 1; i <= 25; ++i) {
-        BitrisCellView *cell = [[self cells] objectAtIndex:i - 1];
-        NSUInteger shifted = 1 << i;
-        if(board & shifted) {
-            if(~currentBoard & shifted) [cell setAlpha:0.0];
-        } else {
-            if(currentBoard & shifted) [cell setAlpha:0.0];
-        }
-    }
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(finishRenderingAnimation:finished:withBoard:)];
-    [UIView commitAnimations];
-}
-
-- (void)finishRenderingAnimation:(NSString *)animation finished:(NSNumber *)finished withBoard:(NSUInteger)board {
-    [UIView beginAnimations:@"finishrender" context:nil];
+    [UIView beginAnimations:@"boardrender" context:nil];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
     [UIView setAnimationDuration:0.5];
     int i;

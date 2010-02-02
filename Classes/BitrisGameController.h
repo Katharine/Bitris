@@ -14,16 +14,19 @@
     IBOutlet BitrisBoardView *gameBoard;
     IBOutlet BitrisPieceView *thisPieceView;
     IBOutlet BitrisPieceView *nextPieceView;
+    IBOutlet UILabel *scoreView;
     NSMutableArray *remainingPieces;
     NSArray *allPieces;
-    NSInteger currentPiece;
+    BitrisPiece *currentPiece;
+    NSInteger currentScore;
 }
 
 - (ushort)guessIntendedCellForPiece:(BitrisPiece *)piece atCell:(ushort)cell;
 - (NSArray *)loadBitrisPieces;
-- (IBAction)nextPiece;
+- (void)pickNextPiece;
 
 @property(retain) IBOutlet BitrisBoardView *gameBoard;
 @property(retain) IBOutlet BitrisPieceView *thisPieceView;
 @property(retain) IBOutlet BitrisPieceView *nextPieceView;
+@property(retain) IBOutlet UILabel *scoreView;
 @end

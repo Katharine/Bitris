@@ -14,9 +14,12 @@
 #define MASK_2x2 0x0063
 
 #define VALID_CELLS 0x3fffffe
+#define LEFT_EDGE 0x4210842
+#define RIGHT_EDGE 0x42108420
+#define BELOW_BOTTOM 0x7C000000
 
-#define STRADDLING_EDGES(piece)(((piece) & 0x4210842) && ((piece) & 0x42108421))
-#define ON_BOARD(piece) (!STRADDLING_EDGES(piece) && (((piece) & 0x7C000000) == 0) && (piece) > 0)
+#define STRADDLING_EDGES(piece) (((piece) & LEFT_EDGE) && ((piece) & RIGHT_EDGE))
+#define ON_BOARD(piece) (!STRADDLING_EDGES(piece) && (((piece) & BELOW_BOTTOM) == 0) && (piece) > 0)
 #define PIECE_TO_BOARD(piece, cell) (piece).bitmask << ((cell) + (32 - (piece).offset))
 
 @interface BitrisPiece : NSObject {

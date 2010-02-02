@@ -21,7 +21,6 @@
 
 - (void)createSubviews;
 - (void)renderBoardWithAnimation:(NSUInteger)board;
-- (void)finishRenderingAnimation:(NSString *)animation finished:(NSNumber *)finished withBoard:(NSUInteger)board;
 - (BOOL)setAlpha:(CGFloat)opacity onEmptyBitmask:(NSUInteger)bitmask;
 - (BOOL)previewPiece:(BitrisPiece *)piece atCell:(ushort)cell;
 - (void)clearPreviewOfPiece:(BitrisPiece *)piece atCell:(ushort)cell;
