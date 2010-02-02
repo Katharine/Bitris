@@ -11,11 +11,14 @@
 
 @interface BitrisGameController : UIViewController <BitrisBoardDelegate> {
     IBOutlet BitrisBoardView *gameBoard;
-    NSArray *allPieces;
     NSMutableArray *remainingPieces;
+    NSArray *allPieces;
+    NSInteger currentPiece;
 }
 
-- (ushort)guessIntendedCellForPiece:(BitrisPiece)piece atCell:(ushort)cell;
+- (ushort)guessIntendedCellForPiece:(BitrisPiece *)piece atCell:(ushort)cell;
+- (NSArray *)loadBitrisPieces;
+- (IBAction)nextPiece;
 
 @property(retain) IBOutlet BitrisBoardView *gameBoard;
 @end

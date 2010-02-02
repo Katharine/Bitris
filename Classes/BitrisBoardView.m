@@ -158,7 +158,7 @@
     }
 }
 
-- (BOOL)previewPiece:(BitrisPiece)piece atCell:(ushort)cell {
+- (BOOL)previewPiece:(BitrisPiece *)piece atCell:(ushort)cell {
     NSUInteger positionedPiece = PIECE_TO_BOARD(piece, cell);
     if(!ON_BOARD(positionedPiece)) return NO;
     BOOL valid = [self setAlpha:0.0 onEmptyBitmask:positionedPiece];
@@ -170,7 +170,7 @@
     return valid;
 }
 
-- (void)clearPreviewOfPiece:(BitrisPiece)piece atCell:(ushort)cell {
+- (void)clearPreviewOfPiece:(BitrisPiece *)piece atCell:(ushort)cell {
     NSUInteger positionedPiece = PIECE_TO_BOARD(piece, cell);
     [self setAlpha:1.0 onBitmask:positionedPiece];
     [self setBackgroundColor:[UIColor yellowColor]];
