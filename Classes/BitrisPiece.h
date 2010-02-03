@@ -13,7 +13,7 @@
 #define MASK_2x3 0x0C63
 #define MASK_2x2 0x0063
 
-#define VALID_CELLS 0x3fffffe
+#define VALID_CELLS 0x3FFFFFE
 #define LEFT_EDGE 0x4210842
 #define RIGHT_EDGE 0x42108420
 #define BELOW_BOTTOM 0x7C000000

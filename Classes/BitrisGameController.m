@@ -10,7 +10,7 @@
 
 
 @implementation BitrisGameController
-@synthesize gameBoard, thisPieceView, nextPieceView, nextNextPieceView, scoreView;
+@synthesize gameBoard, thisPieceView, nextPieceView, nextNextPieceView, scoreView, timerView;
 
 #pragma mark Stuff
 
@@ -81,19 +81,69 @@
             nil];
 }
 
-- (void)pickNextPiece {
-    currentPiece = [remainingPieces lastObject];
-    if([remainingPieces count] > 0) {
-        [remainingPieces removeLastObject];
-        [thisPieceView displayPiece:currentPiece];
-        [nextPieceView displayPiece:[remainingPieces lastObject]];
-        if([remainingPieces count] > 1) {
-            [nextNextPieceView displayPiece:[remainingPieces objectAtIndex:([remainingPieces count] - 2)]];
-        } else {
-            [nextNextPieceView clear];
-        }
+- (void)startTimer {
+    if (pieceTimer == nil) {
+        pieceTimer = [NSTimer scheduledTimerWithTimeInterval:0.04
+                                                      target:self
+                                                    selector:@selector(timerFired)
+                                                    userInfo:nil
+                                                     repeats:YES
+                      ];
+    }
+    if(timerEndTime != nil) {
+        [timerEndTime release];
+        timerEndTime = nil;
+    }
+    timerEndTime = [[NSDate dateWithTimeIntervalSinceNow:20.0] retain];
+}
+
+- (void)stopTimer {
+    [pieceTimer invalidate];
+    pieceTimer = nil;
+    [timerEndTime release];
+    timerEndTime = nil;
+}
+
+- (void)timerFired {
+    NSTimeInterval remaining = [timerEndTime timeIntervalSinceNow];
+    if(remaining > 0.0) {
+        float progress = remaining / 20.0;
+        [timerView setProgress:progress];
     } else {
-        [nextPieceView clear];
+        [self stopTimer];
+        [self missedPiece];
+    }
+}
+
+- (void)missedPiece {
+    [self updateScore:-7];
+    [self pickNextPiece];
+}
+
+- (void)updateScore:(NSInteger)delta {
+    currentScore += delta;
+    [[self scoreView] setText:[[NSNumber numberWithInteger:currentScore] stringValue]];
+}
+
+- (void)pickNextPiece {
+    if([remainingPieces count] > 0) {
+        currentPiece = [remainingPieces lastObject];
+        [thisPieceView displayPiece:currentPiece];
+        [remainingPieces removeLastObject];
+        if([remainingPieces count] > 0) {
+            [nextPieceView displayPiece:[remainingPieces lastObject]];
+            if([remainingPieces count] > 1) {
+                [nextNextPieceView displayPiece:[remainingPieces objectAtIndex:([remainingPieces count] - 2)]];
+            } else {
+                [nextNextPieceView clear];
+            }
+        } else {
+            [nextPieceView clear];
+        }
+        [self startTimer];
+    } else {
+        [thisPieceView clear];
+        currentPiece = nil;
     }
 }
 
@@ -158,7 +208,9 @@
 
 - (void)gameOver {
     // Do something useful here.
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Game over!" message:[NSString stringWithFormat:@"You scored %i!", currentScore, nil] delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
+    [self stopTimer];
+    [self pickNextPiece];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Game over!" message:[NSString stringWithFormat:@"You scored %i!\n(Put something useful here)", currentScore, nil] delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
     [alert show];
     [alert release];
 }
@@ -175,6 +227,7 @@
     for (NSInteger i = [remainingPieces count] - 1; i > 0; --i) {
         [remainingPieces exchangeObjectAtIndex: random() % (i + 1) withObjectAtIndex: i]; 
     }
+    [[self timerView] setProgress:1.0];
     [self pickNextPiece];
 }
 
@@ -193,11 +246,13 @@
     self.thisPieceView = nil;
     self.nextNextPieceView = nil;
     self.scoreView = nil;
+    self.timerView = nil;
 }
 
 
 - (void)dealloc {
     [super dealloc];
+    [pieceTimer invalidate];
     [gameBoard release];
     [allPieces release];
     [remainingPieces release];
@@ -222,10 +277,9 @@
         [gameBoard renderBoardWithAnimation:board];
         NSInteger score = [self findScoreForBoard:&board];
         if(score > 0) {
-            currentScore += score;
             // Get this to animate nicely.
             [gameBoard renderBoardWithAnimation:board];
-            [scoreView setText:[[NSNumber numberWithInteger:currentScore] stringValue]];
+            [self updateScore:score];
         }
         if([remainingPieces count] > 0) {
             [self pickNextPiece];
