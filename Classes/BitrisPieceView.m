@@ -43,6 +43,12 @@
     }
 }
 
+- (void)clear {
+    for(NSInteger i = 0; i < 9; ++i) {
+        [[cells objectAtIndex:i] setBackgroundColor:[UIColor lightGrayColor]];
+    }
+}
+
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self createSubviews];

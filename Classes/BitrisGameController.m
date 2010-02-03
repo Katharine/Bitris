@@ -10,7 +10,7 @@
 
 
 @implementation BitrisGameController
-@synthesize gameBoard, thisPieceView, nextPieceView, scoreView;
+@synthesize gameBoard, thisPieceView, nextPieceView, nextNextPieceView, scoreView;
 
 #pragma mark Stuff
 
@@ -42,44 +42,43 @@
 }
 
 - (NSArray *)loadBitrisPieces {
-    return [[NSArray arrayWithObjects:
-             BitrisPieceMake(0x0001, 0),
-             BitrisPieceMake(0x0006, 1),
-             BitrisPieceMake(0x000E, 2),
-             BitrisPieceMake(0x008E, 2),
-             BitrisPieceMake(0x0042, 1),
-             BitrisPieceMake(0x0044, 2),
-             BitrisPieceMake(0x0046, 1),
-             BitrisPieceMake(0x004E, 2),
-             BitrisPieceMake(0x0082, 1),
-             BitrisPieceMake(0x0086, 2),
-             BitrisPieceMake(0x00C2, 6),
-             BitrisPieceMake(0x00C4, 7),
-             BitrisPieceMake(0x00CC, 7),
-             BitrisPieceMake(0x010E, 2),
-             BitrisPieceMake(0x014E, 2),
-             BitrisPieceMake(0x0186, 7),
-             BitrisPieceMake(0x01C2, 7),
-             BitrisPieceMake(0x01C4, 7),
-             BitrisPieceMake(0x01C8, 7),
-             BitrisPieceMake(0x01CA, 7),
-             BitrisPieceMake(0x0842, 6),
-             BitrisPieceMake(0x0846, 6),
-             BitrisPieceMake(0x0888, 7),
-             BitrisPieceMake(0x08C2, 6),
-             BitrisPieceMake(0x08C4, 6),
-             BitrisPieceMake(0x1086, 7),
-             BitrisPieceMake(0x10C2, 7),
-             BitrisPieceMake(0x10C4, 7),
-             BitrisPieceMake(0x11C4, 7),
-             BitrisPieceMake(0x1842, 6),
-             BitrisPieceMake(0x1846, 6),
-             BitrisPieceMake(0x1884, 7),
-             BitrisPieceMake(0x1886, 7),
-             BitrisPieceMake(0x2082, 7),
-             BitrisPieceMake(0x288A, 7),
-             nil]
-            retain];
+    return [NSArray arrayWithObjects:
+            BitrisPieceMake(0x0001, 0),
+            BitrisPieceMake(0x0006, 1),
+            BitrisPieceMake(0x000E, 2),
+            BitrisPieceMake(0x008E, 2),
+            BitrisPieceMake(0x0042, 1),
+            BitrisPieceMake(0x0044, 2),
+            BitrisPieceMake(0x0046, 1),
+            BitrisPieceMake(0x004E, 2),
+            BitrisPieceMake(0x0082, 1),
+            BitrisPieceMake(0x0086, 2),
+            BitrisPieceMake(0x00C2, 6),
+            BitrisPieceMake(0x00C4, 7),
+            BitrisPieceMake(0x00CC, 7),
+            BitrisPieceMake(0x010E, 2),
+            BitrisPieceMake(0x014E, 2),
+            BitrisPieceMake(0x0186, 7),
+            BitrisPieceMake(0x01C2, 7),
+            BitrisPieceMake(0x01C4, 7),
+            BitrisPieceMake(0x01C8, 7),
+            BitrisPieceMake(0x01CA, 7),
+            BitrisPieceMake(0x0842, 6),
+            BitrisPieceMake(0x0846, 6),
+            BitrisPieceMake(0x0888, 7),
+            BitrisPieceMake(0x08C2, 6),
+            BitrisPieceMake(0x08C4, 6),
+            BitrisPieceMake(0x1086, 7),
+            BitrisPieceMake(0x10C2, 7),
+            BitrisPieceMake(0x10C4, 7),
+            BitrisPieceMake(0x11C4, 7),
+            BitrisPieceMake(0x1842, 6),
+            BitrisPieceMake(0x1846, 6),
+            BitrisPieceMake(0x1884, 7),
+            BitrisPieceMake(0x1886, 7),
+            BitrisPieceMake(0x2082, 7),
+            BitrisPieceMake(0x288A, 7),
+            nil];
 }
 
 - (void)pickNextPiece {
@@ -88,6 +87,13 @@
         [remainingPieces removeLastObject];
         [thisPieceView displayPiece:currentPiece];
         [nextPieceView displayPiece:[remainingPieces lastObject]];
+        if([remainingPieces count] > 1) {
+            [nextNextPieceView displayPiece:[remainingPieces objectAtIndex:([remainingPieces count] - 2)]];
+        } else {
+            [nextNextPieceView clear];
+        }
+    } else {
+        [nextPieceView clear];
     }
 }
 
@@ -161,7 +167,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [gameBoard setDelegate:self];
-    allPieces = [self loadBitrisPieces];
+    allPieces = [[self loadBitrisPieces] retain];
     remainingPieces = [[NSMutableArray arrayWithArray:allPieces] retain];
     currentScore = 0;
     // Shuffle it.
@@ -185,6 +191,7 @@
     self.gameBoard = nil;
     self.nextPieceView = nil;
     self.thisPieceView = nil;
+    self.nextNextPieceView = nil;
     self.scoreView = nil;
 }
 
@@ -196,6 +203,7 @@
     [remainingPieces release];
     [thisPieceView release];
     [nextPieceView release];
+    [nextNextPieceView release];
     [scoreView release];
 }
 

@@ -18,5 +18,6 @@
 
 - (void)createSubviews;
 - (void)displayPiece:(BitrisPiece *)piece;
+- (void)clear;
 
 @end
