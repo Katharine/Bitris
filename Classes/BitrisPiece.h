@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-#define MASK_3x3 0x1CE7
-#define MASK_3x2 0x00E7
-#define MASK_2x3 0x0C63
-#define MASK_2x2 0x0063
+#define MASK_3x3 0x01CE7
+#define MASK_3x2 0x000E7
+#define MASK_2x3 0x00C63
+#define MASK_2x2 0x00063
 
 #define VALID_CELLS 0x3FFFFFE
 #define LEFT_EDGE 0x4210842
@@ -20,7 +20,7 @@
 
 #define STRADDLING_EDGES(piece) (((piece) & LEFT_EDGE) && ((piece) & RIGHT_EDGE))
 #define ON_BOARD(piece) (!STRADDLING_EDGES(piece) && (((piece) & BELOW_BOTTOM) == 0) && (piece) > 0)
-#define PIECE_TO_BOARD(piece, cell) (piece).bitmask << ((cell) + (32 - (piece).offset))
+#define PIECE_TO_BOARD(piece, cell) (piece).bitmask << ((cell) - (piece).offset)
 
 @interface BitrisPiece : NSObject {
     NSInteger bitmask;

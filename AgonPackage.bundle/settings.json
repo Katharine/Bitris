@@ -1,13 +1,22 @@
 {
     "leaderboards": [
         {
-            "allow_worse": true, 
+            "allow_worse": false, 
             "sort_descending": true, 
             "name": "Classic", 
             "resource_id": 0, 
             "id": 0, 
             "path": "", 
             "order": 0
+        }, 
+        {
+            "allow_worse": false, 
+            "sort_descending": true, 
+            "name": "Endless", 
+            "resource_id": 0, 
+            "id": 1, 
+            "path": "", 
+            "order": 1
         }
     ], 
     "blobs": [

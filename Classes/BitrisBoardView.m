@@ -156,6 +156,12 @@
     [self setBackgroundColor:[UIColor yellowColor]];
 }
 
+- (void)clearPreview {
+    for(NSInteger i = 0; i < 25; ++i) {
+        [(BitrisCellView *)[cells objectAtIndex:i] setAlpha:1.0];
+    }
+}
+
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self createSubviews];

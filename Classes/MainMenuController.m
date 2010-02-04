@@ -10,17 +10,26 @@
 
 @implementation MainMenuController
 
-- (void)startClassicGame {
-    BitrisGameController *nextScreen = [[BitrisGameController alloc] initWithNibName:@"MainGame" bundle:nil];
-    [[[self view] superview] addSubview:[nextScreen view]];
+- (void)startGameOfType:(BitrisGameType)gameType {
+    BitrisGameController *gameScreen = [[BitrisGameController alloc] initWithNibName:@"MainGame" bundle:nil];
+    [gameScreen setGameType:gameType];
+    [[[self view] superview] addSubview:[gameScreen view]];
     [[self view] removeFromSuperview];
 }
 
-- (void)showLeaderboards {
+- (IBAction)startClassicGame {
+    [self startGameOfType:BitrisGameClassic];
+}
+
+- (IBAction)startEndlessGame {
+    [self startGameOfType:BitrisGameEndless];
+}
+
+- (IBAction)showLeaderboards {
     AgonShow(AgonBladeLeaderboards, YES);
 }
 
-- (void)showAwards {
+- (IBAction)showAwards {
     AgonShow(AgonBladeAwards, YES);
 }
 

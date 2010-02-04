@@ -7,16 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BitrisGameController.h"
 #import "AGON.h"
-
+#import "BitrisGameController.h"
 
 @interface MainMenuController : UIViewController {
 
 }
 
 - (IBAction)startClassicGame;
+- (IBAction)startEndlessGame;
 - (IBAction)showLeaderboards;
 - (IBAction)showAwards;
+- (void)startGameOfType:(BitrisGameType)gameType;
 
 @end

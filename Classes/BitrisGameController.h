@@ -7,11 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AudioToolbox/AudioToolbox.h>
 #import "BitrisBoardView.h"
 #import "BitrisPieceView.h"
-#import "MainMenuController.h"
 #import "KBCircularProgressView.h"
 #import "AGON.h"
+
+typedef enum {
+    BitrisGameClassic,
+    BitrisGameEndless
+} BitrisGameType;
+
+#define TIME_LIMIT 10.0
+#define SCORE_2x2 5
+#define SCORE_2x3 15
+#define SCORE_3x3 30
+
+#define AWARD_MADE_2x2 0
+#define AWARD_MADE_2x3 1
+#define AWARD_MADE_3x3 2
+
+#define SCOREBOARD_CLASSIC 0
+#define SCOREBOARD_ENDLESS 1
 
 @interface BitrisGameController : UIViewController <BitrisBoardDelegate> {
     IBOutlet BitrisBoardView *gameBoard;
@@ -26,6 +43,7 @@
     NSInteger currentScore;
     NSTimer *pieceTimer;
     NSDate *timerEndTime;
+    BitrisGameType gameType;
 }
 
 - (ushort)guessIntendedCellForPiece:(BitrisPiece *)piece atCell:(ushort)cell;
@@ -37,6 +55,8 @@
 - (void)updateScore:(NSInteger)delta;
 - (void)pickNextPiece;
 - (void)showMenu;
+- (void)gameOver;
+- (void)fillRemainingPieces;
 
 @property(retain) IBOutlet BitrisBoardView *gameBoard;
 @property(retain) IBOutlet BitrisPieceView *thisPieceView;
@@ -44,4 +64,5 @@
 @property(retain) IBOutlet BitrisPieceView *nextNextPieceView;
 @property(retain) IBOutlet UILabel *scoreView;
 @property(retain) IBOutlet KBCircularProgressView *timerView;
+@property BitrisGameType gameType;
 @end

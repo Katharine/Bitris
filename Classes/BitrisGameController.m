@@ -7,10 +7,12 @@
 //
 
 #import "BitrisGameController.h"
+#import "MainMenuController.h"
 
 
 @implementation BitrisGameController
 @synthesize gameBoard, thisPieceView, nextPieceView, nextNextPieceView, scoreView, timerView;
+@synthesize gameType;
 
 #pragma mark Stuff
 
@@ -94,7 +96,7 @@
         [timerEndTime release];
         timerEndTime = nil;
     }
-    timerEndTime = [[NSDate dateWithTimeIntervalSinceNow:20.0] retain];
+    timerEndTime = [[NSDate dateWithTimeIntervalSinceNow:TIME_LIMIT] retain];
 }
 
 - (void)stopTimer {
@@ -107,7 +109,7 @@
 - (void)timerFired {
     NSTimeInterval remaining = [timerEndTime timeIntervalSinceNow];
     if(remaining > 0.0) {
-        float progress = remaining / 20.0;
+        float progress = remaining / TIME_LIMIT;
         [timerView setProgress:progress];
     } else {
         [self stopTimer];
@@ -116,8 +118,15 @@
 }
 
 - (void)missedPiece {
-    [self updateScore:-7];
-    [self pickNextPiece];
+    switch(gameType) {
+        case BitrisGameClassic:
+            [self updateScore:-7];
+            [self pickNextPiece];
+            break;
+        case BitrisGameEndless:
+            [self gameOver];
+            break;
+    }
 }
 
 - (void)updateScore:(NSInteger)delta {
@@ -130,6 +139,9 @@
         currentPiece = [remainingPieces lastObject];
         [thisPieceView displayPiece:currentPiece];
         [remainingPieces removeLastObject];
+        if(gameType == BitrisGameEndless && [remainingPieces count] < 2) {
+            [self fillRemainingPieces];
+        }
         if([remainingPieces count] > 0) {
             [nextPieceView displayPiece:[remainingPieces lastObject]];
             if([remainingPieces count] > 1) {
@@ -144,6 +156,14 @@
     } else {
         [thisPieceView clear];
         currentPiece = nil;
+    }
+}
+
+- (void)fillRemainingPieces {
+    remainingPieces = [[NSMutableArray arrayWithArray:allPieces] retain];
+    srandomdev();
+    for (NSInteger i = [remainingPieces count] - 1; i > 0; --i) {
+        [remainingPieces exchangeObjectAtIndex: random() % (i + 1) withObjectAtIndex: i]; 
     }
 }
 
@@ -162,7 +182,7 @@
                 int t = MASK_3x3 << i;
                 if(!STRADDLING_EDGES(t)) {
                     tBits = t;
-                    tScore = 30;
+                    tScore = SCORE_3x3;
                     goto loop;
                 }
             }
@@ -170,7 +190,7 @@
                 int t = MASK_3x2 << i;
                 if(!STRADDLING_EDGES(t)) {
                     tBits = t;
-                    tScore = 15;
+                    tScore = SCORE_2x3;
                     goto loop;
                 }
             }
@@ -178,7 +198,7 @@
                 int t = MASK_2x3 << i;
                 if(!STRADDLING_EDGES(t)) {
                     tBits = t;
-                    tScore = 15;
+                    tScore = SCORE_2x3;
                     goto loop;
                 }
             }
@@ -186,7 +206,7 @@
                 int t = MASK_2x2 << i;
                 if(!STRADDLING_EDGES(t)) {
                     tBits = t;
-                    tScore = 5;
+                    tScore = SCORE_2x2;
                     goto loop;
                 }
             }
@@ -202,12 +222,12 @@
         }
         *board = (*board ^ bits);
         totalScore += score;
-        if(score == 5) {
-            AgonUnlockAwardWithId(0);
-        } else if(score == 15) {
-            AgonUnlockAwardWithId(1);
-        } else if(score == 30) {
-            AgonUnlockAwardWithId(2);
+        if(score == SCORE_2x2) {
+            AgonUnlockAwardWithId(AWARD_MADE_2x2);
+        } else if(score == SCORE_2x3) {
+            AgonUnlockAwardWithId(AWARD_MADE_2x3);
+        } else if(score == SCORE_3x3) {
+            AgonUnlockAwardWithId(AWARD_MADE_3x3);
         }
     } while (bits != 0);
     return totalScore;
@@ -216,10 +236,20 @@
 - (void)gameOver {
     // Do something useful here.
     [self stopTimer];
-    [self pickNextPiece];
-    AgonSubmitIntegerScore(currentScore, [[NSNumber numberWithInteger:currentScore] stringValue], 0);
+    [thisPieceView clear];
+    [nextPieceView clear];
+    [nextNextPieceView clear];
+    switch(gameType) {
+        case BitrisGameClassic:
+            AgonSubmitIntegerScore(currentScore, [[NSNumber numberWithInteger:currentScore] stringValue], SCOREBOARD_CLASSIC);
+            AgonShowLeaderboard(SCOREBOARD_CLASSIC, YES);
+            break;
+        case BitrisGameEndless:
+            AgonSubmitIntegerScore(currentScore, [[NSNumber numberWithInteger:currentScore] stringValue], SCOREBOARD_ENDLESS);
+            AgonShowLeaderboard(SCOREBOARD_ENDLESS, YES);
+            break;
+    }
     AgonEndGameSession();
-    AgonShowLeaderboard(0, YES);
 }
 
 - (void)showMenu {
@@ -235,15 +265,10 @@
 #pragma mark UIViewController
 
 - (void)viewDidAppear:(BOOL)animated {
+    currentScore = 0;
     [gameBoard setDelegate:self];
     allPieces = [[self loadBitrisPieces] retain];
-    remainingPieces = [[NSMutableArray arrayWithArray:allPieces] retain];
-    currentScore = 0;
-    // Shuffle it.
-    srandomdev();
-    for (NSInteger i = [remainingPieces count] - 1; i > 0; --i) {
-        [remainingPieces exchangeObjectAtIndex: random() % (i + 1) withObjectAtIndex: i]; 
-    }
+    [self fillRemainingPieces];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(agonDidHide) name:AGONDidHideNotification object:nil];
     AgonStartGameSession();
     [[self timerView] setProgress:1.0];
@@ -294,6 +319,7 @@
     NSInteger bitmask = [currentPiece getBitmaskForCell:cell];
     if(ON_BOARD(bitmask) && ([gameBoard currentBoard] & bitmask) == 0) {
         NSInteger board = ([gameBoard currentBoard] | bitmask);
+        currentPiece = nil;
         [gameBoard renderBoardWithAnimation:board];
         NSInteger score = [self findScoreForBoard:&board];
         if(score > 0) {
@@ -307,20 +333,20 @@
             [self gameOver];
         }
     } else {
-        [gameBoard clearPreviewOfPiece:currentPiece atCell:cell];
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+        [gameBoard clearPreview];
     }
+
 }
 
 - (void)movedFromCellNumber:(ushort)oldCell toCellNumber:(ushort)newCell {
-    oldCell = [self guessIntendedCellForPiece:currentPiece atCell:oldCell];
     newCell = [self guessIntendedCellForPiece:currentPiece atCell:newCell];
-    [gameBoard clearPreviewOfPiece:currentPiece atCell:oldCell];
+    [gameBoard clearPreview];
     [gameBoard previewPiece:currentPiece atCell:newCell];
 }
 
 - (void)abandonedCell:(ushort)cell {
-    cell = [self guessIntendedCellForPiece:currentPiece atCell:cell];
-    [gameBoard clearPreviewOfPiece:currentPiece atCell:cell];
+    [gameBoard clearPreview];
 }
 
 @end
