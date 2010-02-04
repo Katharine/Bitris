@@ -1,0 +1,72 @@
+{
+    "leaderboards": [
+        {
+            "allow_worse": true, 
+            "sort_descending": true, 
+            "name": "Classic", 
+            "resource_id": 0, 
+            "id": 0, 
+            "path": "", 
+            "order": 0
+        }
+    ], 
+    "blobs": [
+        {
+            "id": 0, 
+            "max_size": 10, 
+            "name": "Classic play count"
+        }
+    ], 
+    "application": {
+        "twitter_hash_tag": "", 
+        "name": "Bitris", 
+        "resource_id": 0, 
+        "localized_languages": [
+            "en"
+        ], 
+        "available_pocketscores": 1000, 
+        "server": "http:\/\/devdb.agon-online.com", 
+        "id": "F12B14B4FA09B0CB7770EC6FEB6D706ADED77DF1"
+    }, 
+    "version": 1, 
+    "leaderboard_folders": [], 
+    "awards": [
+        {
+            "description": "Successfully created a 2x2 block!", 
+            "resource_id": 0, 
+            "clue": "", 
+            "secret": false, 
+            "score": 5, 
+            "order": 0, 
+            "id": 0, 
+            "name": "Two squared"
+        }, 
+        {
+            "description": "Created a 3x2 rectangle", 
+            "resource_id": 0, 
+            "clue": "", 
+            "secret": false, 
+            "score": 15, 
+            "order": 1, 
+            "id": 1, 
+            "name": "Rectangular"
+        }, 
+        {
+            "description": "Created a three by three square.", 
+            "resource_id": 0, 
+            "clue": "", 
+            "secret": false, 
+            "score": 30, 
+            "order": 2, 
+            "id": 2, 
+            "name": "Three squared"
+        }
+    ], 
+    "resources": [
+        {
+            "is_localized": false, 
+            "id": 0, 
+            "name": "app_icon"
+        }
+    ]
+}

@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AGON.h"
+#import "MainMenuController.h"
 
 @interface BitrisAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
-    IBOutlet UIViewController *firstController;
 }
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
-@property (nonatomic, retain) IBOutlet UIViewController *firstController;
 
 @end
 

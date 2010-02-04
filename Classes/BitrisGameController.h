@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "BitrisBoardView.h"
 #import "BitrisPieceView.h"
+#import "MainMenuController.h"
 #import "KBCircularProgressView.h"
+#import "AGON.h"
 
 @interface BitrisGameController : UIViewController <BitrisBoardDelegate> {
     IBOutlet BitrisBoardView *gameBoard;
@@ -34,6 +36,7 @@
 - (void)missedPiece;
 - (void)updateScore:(NSInteger)delta;
 - (void)pickNextPiece;
+- (void)showMenu;
 
 @property(retain) IBOutlet BitrisBoardView *gameBoard;
 @property(retain) IBOutlet BitrisPieceView *thisPieceView;

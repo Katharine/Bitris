@@ -10,12 +10,17 @@
 
 @implementation BitrisAppDelegate
 
-@synthesize window, firstController;
+@synthesize window;
 
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {    
-
-    // Override point for customization after application launch
+- (void)applicationDidFinishLaunching:(UIApplication *)application {
+    if(!AgonCreate(@"2D93FFBE4ECA914C356E87EB53D8E4DDF4B46888", AgonDeveloperServers)) {
+        NSLog(@"AGON initialisation failed.");
+    } else {
+        NSLog(@"AGON initialised.");
+    }
+    
+    MainMenuController *firstController = [[MainMenuController alloc] initWithNibName:@"MainMenu" bundle:nil];
     [window addSubview:[firstController view]];
     [window makeKeyAndVisible];
 }

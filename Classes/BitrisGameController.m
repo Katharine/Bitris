@@ -202,6 +202,13 @@
         }
         *board = (*board ^ bits);
         totalScore += score;
+        if(score == 5) {
+            AgonUnlockAwardWithId(0);
+        } else if(score == 15) {
+            AgonUnlockAwardWithId(1);
+        } else if(score == 30) {
+            AgonUnlockAwardWithId(2);
+        }
     } while (bits != 0);
     return totalScore;
 }
@@ -210,9 +217,19 @@
     // Do something useful here.
     [self stopTimer];
     [self pickNextPiece];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Game over!" message:[NSString stringWithFormat:@"You scored %i!\n(Put something useful here)", currentScore, nil] delegate:nil cancelButtonTitle:@"Dismiss" otherButtonTitles:nil];
-    [alert show];
-    [alert release];
+    AgonSubmitIntegerScore(currentScore, [[NSNumber numberWithInteger:currentScore] stringValue], 0);
+    AgonEndGameSession();
+    AgonShowLeaderboard(0, YES);
+}
+
+- (void)showMenu {
+    MainMenuController *menu = [[MainMenuController alloc] initWithNibName:@"MainMenu" bundle:nil];
+    [[[self view] superview] addSubview:[menu view]];
+    [[self view] removeFromSuperview];
+}
+
+- (void)agonDidHide {
+    [self showMenu];
 }
 
 #pragma mark UIViewController
@@ -227,6 +244,8 @@
     for (NSInteger i = [remainingPieces count] - 1; i > 0; --i) {
         [remainingPieces exchangeObjectAtIndex: random() % (i + 1) withObjectAtIndex: i]; 
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(agonDidHide) name:AGONDidHideNotification object:nil];
+    AgonStartGameSession();
     [[self timerView] setProgress:1.0];
     [self pickNextPiece];
 }
@@ -251,7 +270,7 @@
 
 
 - (void)dealloc {
-    [super dealloc];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [pieceTimer invalidate];
     [gameBoard release];
     [allPieces release];
@@ -260,6 +279,7 @@
     [nextPieceView release];
     [nextNextPieceView release];
     [scoreView release];
+    [super dealloc];
 }
 
 #pragma mark BitrisBoardDelegate

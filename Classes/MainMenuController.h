@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BitrisGameController.h"
+#import "AGON.h"
 
 
 @interface MainMenuController : UIViewController {
@@ -14,5 +16,7 @@
 }
 
 - (IBAction)startClassicGame;
+- (IBAction)showLeaderboards;
+- (IBAction)showAwards;
 
 @end

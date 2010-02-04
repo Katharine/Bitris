@@ -7,8 +7,6 @@
 //
 
 #import "MainMenuController.h"
-#import "BitrisGameController.h"
-
 
 @implementation MainMenuController
 
@@ -18,6 +16,13 @@
     [[self view] removeFromSuperview];
 }
 
+- (void)showLeaderboards {
+    AgonShow(AgonBladeLeaderboards, YES);
+}
+
+- (void)showAwards {
+    AgonShow(AgonBladeAwards, YES);
+}
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
@@ -33,6 +38,7 @@
 
 
 - (void)dealloc {
+    NSLog(@"Menu dealloc.");
     [super dealloc];
 }
 
