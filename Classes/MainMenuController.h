@@ -11,13 +11,18 @@
 #import "BitrisGameController.h"
 
 @interface MainMenuController : UIViewController {
-
+    IBOutlet UILabel *accountLabel;
 }
+
+@property(retain) IBOutlet UILabel *accountLabel;
 
 - (IBAction)startClassicGame;
 - (IBAction)startEndlessGame;
 - (IBAction)showLeaderboards;
 - (IBAction)showAwards;
+- (IBAction)changeAccount;
+- (IBAction)editProfile;
+- (void)profileChanged;
 - (void)startGameOfType:(BitrisGameType)gameType;
 
 @end

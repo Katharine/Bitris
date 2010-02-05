@@ -9,12 +9,14 @@
 #import "MainMenuController.h"
 
 @implementation MainMenuController
+@synthesize accountLabel;
 
 - (void)startGameOfType:(BitrisGameType)gameType {
     BitrisGameController *gameScreen = [[BitrisGameController alloc] initWithNibName:@"MainGame" bundle:nil];
     [gameScreen setGameType:gameType];
     [[[self view] superview] addSubview:[gameScreen view]];
     [[self view] removeFromSuperview];
+    [self release];
 }
 
 - (IBAction)startClassicGame {
@@ -33,6 +35,23 @@
     AgonShow(AgonBladeAwards, YES);
 }
 
+- (IBAction)changeAccount {
+    AgonShowProfilePicker();
+}
+
+- (IBAction)editProfile {
+    AgonShow(AgonBladeProfile, NO);
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [self profileChanged];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(profileChanged) name:AGONProfileChangedNotification object:nil];
+}
+
+- (void)profileChanged {
+    [accountLabel setText:[NSString stringWithFormat:@"You are logged in as %@.", AgonGetActiveProfileUserName(),nil]];
+}
+
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
     [super didReceiveMemoryWarning];
@@ -43,11 +62,14 @@
 - (void)viewDidUnload {
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
+    self.accountLabel = nil;
 }
 
 
 - (void)dealloc {
-    NSLog(@"Menu dealloc.");
+    NSLog(@"Menu dealloc");
+    [accountLabel release];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
 

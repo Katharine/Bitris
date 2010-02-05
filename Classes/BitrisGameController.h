@@ -30,7 +30,7 @@ typedef enum {
 #define SCOREBOARD_CLASSIC 0
 #define SCOREBOARD_ENDLESS 1
 
-@interface BitrisGameController : UIViewController <BitrisBoardDelegate> {
+@interface BitrisGameController : UIViewController <BitrisBoardDelegate, UIAlertViewDelegate> {
     IBOutlet BitrisBoardView *gameBoard;
     IBOutlet BitrisPieceView *thisPieceView;
     IBOutlet BitrisPieceView *nextPieceView;
@@ -44,6 +44,7 @@ typedef enum {
     NSTimer *pieceTimer;
     NSDate *timerEndTime;
     BitrisGameType gameType;
+    float pauseTimeRemaining;
 }
 
 - (ushort)guessIntendedCellForPiece:(BitrisPiece *)piece atCell:(ushort)cell;
@@ -57,6 +58,8 @@ typedef enum {
 - (void)showMenu;
 - (void)gameOver;
 - (void)fillRemainingPieces;
+- (void)pause;
+- (void)unpause;
 
 @property(retain) IBOutlet BitrisBoardView *gameBoard;
 @property(retain) IBOutlet BitrisPieceView *thisPieceView;

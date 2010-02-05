@@ -19,7 +19,8 @@
     } else {
         NSLog(@"AGON initialised.");
     }
-    
+    UIInterfaceOrientation orientations[] = {UIInterfaceOrientationPortrait};
+    AgonSetSupportedInterfaceOrientations(orientations, 1);
     MainMenuController *firstController = [[MainMenuController alloc] initWithNibName:@"MainMenu" bundle:nil];
     [window addSubview:[firstController view]];
     [window makeKeyAndVisible];

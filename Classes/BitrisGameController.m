@@ -160,11 +160,15 @@
 }
 
 - (void)fillRemainingPieces {
-    remainingPieces = [[NSMutableArray arrayWithArray:allPieces] retain];
+    NSMutableArray *newPieces = [NSMutableArray arrayWithArray:allPieces];
     srandomdev();
-    for (NSInteger i = [remainingPieces count] - 1; i > 0; --i) {
-        [remainingPieces exchangeObjectAtIndex: random() % (i + 1) withObjectAtIndex: i]; 
+    for (NSInteger i = [newPieces count] - 1; i > 0; --i) {
+        [newPieces exchangeObjectAtIndex: random() % (i + 1) withObjectAtIndex: i]; 
     }
+    if(remainingPieces == nil) {
+        remainingPieces = [[NSMutableArray alloc] init];
+    }
+    [remainingPieces addObjectsFromArray:newPieces];
 }
 
 - (NSInteger)findScoreForBoard:(NSInteger *)board {
@@ -249,6 +253,7 @@
             AgonShowLeaderboard(SCOREBOARD_ENDLESS, YES);
             break;
     }
+    NSLog(@"gameOver");
     AgonEndGameSession();
 }
 
@@ -256,20 +261,53 @@
     MainMenuController *menu = [[MainMenuController alloc] initWithNibName:@"MainMenu" bundle:nil];
     [[[self view] superview] addSubview:[menu view]];
     [[self view] removeFromSuperview];
+    [self release];
 }
 
 - (void)agonDidHide {
     [self showMenu];
 }
 
+- (void)pause {
+    [pieceTimer invalidate];
+    pieceTimer = nil;
+    pauseTimeRemaining = [timerEndTime timeIntervalSinceNow];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Paused"
+                               message:nil
+                              delegate:self
+                     cancelButtonTitle:@"Continue"
+                     otherButtonTitles:@"End game", nil
+     ];
+    [alert show];
+    [alert release];
+}
+
+- (void)unpause {
+    [self startTimer];
+    [timerEndTime release];
+    timerEndTime = [[NSDate dateWithTimeIntervalSinceNow:pauseTimeRemaining] retain];
+}
+
+#pragma mark UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(buttonIndex == [alertView cancelButtonIndex]) {
+        [self unpause];
+    } else {
+        [self gameOver];
+    }
+}
+
 #pragma mark UIViewController
 
 - (void)viewDidAppear:(BOOL)animated {
     currentScore = 0;
+    remainingPieces = nil;
     [gameBoard setDelegate:self];
     allPieces = [[self loadBitrisPieces] retain];
     [self fillRemainingPieces];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(agonDidHide) name:AGONDidHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause) name:UIApplicationWillResignActiveNotification object:nil];
     AgonStartGameSession();
     [[self timerView] setProgress:1.0];
     [self pickNextPiece];
@@ -305,6 +343,11 @@
     [nextNextPieceView release];
     [scoreView release];
     [super dealloc];
+}
+
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self pause];
 }
 
 #pragma mark BitrisBoardDelegate

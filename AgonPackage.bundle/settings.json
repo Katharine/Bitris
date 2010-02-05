@@ -41,8 +41,8 @@
     "leaderboard_folders": [], 
     "awards": [
         {
-            "description": "Successfully created a 2x2 block!", 
-            "resource_id": 0, 
+            "description": "Created a 2x2 block", 
+            "resource_id": 1, 
             "clue": "", 
             "secret": false, 
             "score": 5, 
@@ -51,24 +51,54 @@
             "name": "Two squared"
         }, 
         {
-            "description": "Created a 3x2 rectangle", 
-            "resource_id": 0, 
+            "description": "Created a 3x2 block", 
+            "resource_id": 2, 
             "clue": "", 
             "secret": false, 
-            "score": 15, 
+            "score": 10, 
             "order": 1, 
             "id": 1, 
             "name": "Rectangular"
         }, 
         {
-            "description": "Created a three by three square.", 
-            "resource_id": 0, 
+            "description": "Made a three by three block", 
+            "resource_id": 3, 
             "clue": "", 
             "secret": false, 
-            "score": 30, 
+            "score": 15, 
             "order": 2, 
             "id": 2, 
             "name": "Three squared"
+        }, 
+        {
+            "description": "Score at least 100 points in Classic mode.", 
+            "resource_id": 4, 
+            "clue": "", 
+            "secret": false, 
+            "score": 20, 
+            "order": 3, 
+            "id": 3, 
+            "name": "First blocks"
+        }, 
+        {
+            "description": "Score at least 200 points in Classic mode.", 
+            "resource_id": 5, 
+            "clue": "", 
+            "secret": false, 
+            "score": 50, 
+            "order": 4, 
+            "id": 4, 
+            "name": "Hobbyist"
+        }, 
+        {
+            "description": "A master of the game!\r\nScored at least 300 points in Classic mode.", 
+            "resource_id": 6, 
+            "clue": "", 
+            "secret": false, 
+            "score": 100, 
+            "order": 5, 
+            "id": 5, 
+            "name": "Professional"
         }
     ], 
     "resources": [
@@ -76,6 +106,36 @@
             "is_localized": false, 
             "id": 0, 
             "name": "app_icon"
+        }, 
+        {
+            "is_localized": false, 
+            "id": 1, 
+            "name": "Award-2x2"
+        }, 
+        {
+            "is_localized": false, 
+            "id": 2, 
+            "name": "Award-2x3"
+        }, 
+        {
+            "is_localized": false, 
+            "id": 3, 
+            "name": "Award-3x3"
+        }, 
+        {
+            "is_localized": false, 
+            "id": 4, 
+            "name": "Award-100-classic"
+        }, 
+        {
+            "is_localized": false, 
+            "id": 5, 
+            "name": "Award-200-classic"
+        }, 
+        {
+            "is_localized": false, 
+            "id": 6, 
+            "name": "Award-300-classic"
         }
     ]
 }
