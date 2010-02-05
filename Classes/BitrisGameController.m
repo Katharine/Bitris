@@ -385,6 +385,7 @@
 
 
 - (void)dealloc {
+    NSLog(@"GameController dealloc.");
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [pieceTimer invalidate];
     [gameBoard release];

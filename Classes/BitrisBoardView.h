@@ -28,6 +28,6 @@
 
 @property(assign) NSArray *cells;
 @property(readonly) NSUInteger currentBoard;
-@property(retain) id<BitrisBoardDelegate> delegate;
+@property(assign) id<BitrisBoardDelegate> delegate;
 
 @end
