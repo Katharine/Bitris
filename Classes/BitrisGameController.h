@@ -27,6 +27,10 @@ typedef enum {
 #define AWARD_MADE_2x3 1
 #define AWARD_MADE_3x3 2
 
+#define AWARD_CLASSIC_100 3
+#define AWARD_CLASSIC_200 4
+#define AWARD_CLASSIC_300 5
+
 #define SCOREBOARD_CLASSIC 0
 #define SCOREBOARD_ENDLESS 1
 
@@ -60,6 +64,9 @@ typedef enum {
 - (void)fillRemainingPieces;
 - (void)pause;
 - (void)unpause;
+- (void)unlockAward:(NSInteger)awardID;
+- (void)hideAwardNotification:(UIView *)awardView;
+- (void)awardNotificationGone:(NSString *)animationID finished:(NSNumber *)finished context:(UIView *)awardView;
 
 @property(retain) IBOutlet BitrisBoardView *gameBoard;
 @property(retain) IBOutlet BitrisPieceView *thisPieceView;

@@ -132,6 +132,17 @@
 - (void)updateScore:(NSInteger)delta {
     currentScore += delta;
     [[self scoreView] setText:[[NSNumber numberWithInteger:currentScore] stringValue]];
+    if(gameType == BitrisGameClassic) {
+        if(currentScore >= 100) {
+            [self unlockAward:AWARD_CLASSIC_100];
+        }
+        if(currentScore >= 200) {
+            [self unlockAward:AWARD_CLASSIC_200];
+        }
+        if(currentScore >= 300) {
+            [self unlockAward:AWARD_CLASSIC_300];
+        }
+    }
 }
 
 - (void)pickNextPiece {
@@ -227,11 +238,11 @@
         *board = (*board ^ bits);
         totalScore += score;
         if(score == SCORE_2x2) {
-            AgonUnlockAwardWithId(AWARD_MADE_2x2);
+            [self unlockAward:AWARD_MADE_2x2];
         } else if(score == SCORE_2x3) {
-            AgonUnlockAwardWithId(AWARD_MADE_2x3);
+            [self unlockAward:AWARD_MADE_2x3];
         } else if(score == SCORE_3x3) {
-            AgonUnlockAwardWithId(AWARD_MADE_3x3);
+            [self unlockAward:AWARD_MADE_3x3];
         }
     } while (bits != 0);
     return totalScore;
@@ -286,6 +297,47 @@
     [self startTimer];
     [timerEndTime release];
     timerEndTime = [[NSDate dateWithTimeIntervalSinceNow:pauseTimeRemaining] retain];
+}
+
+- (void)unlockAward:(NSInteger)awardID {
+    if(AgonIsAwardWithIdUnlocked(awardID)) return;
+    AgonUnlockAwardWithId(awardID);
+    UIView *awardView = [[UIView alloc] initWithFrame:CGRectMake(0, 480, 320, 60)];
+    [awardView setBackgroundColor:[UIColor lightGrayColor]];
+    UIImage *image = AgonGetAwardImageWithId(awardID);
+    NSString *text = AgonGetAwardTitleWithId(awardID);
+    
+    UIImageView *imageView = [[[UIImageView alloc] initWithImage:image] autorelease];
+    [imageView setFrame:CGRectMake(0, 0, 60, 60)];
+    [awardView addSubview:imageView];
+    
+    UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(80, 5, 220, 50)] autorelease];
+    [label setText:[NSString stringWithFormat:@"Award unlocked!\n%@\n\n\n", text, nil]];
+    [label setFont:[UIFont fontWithName:@"Helvetica-Bold" size:13.0]];
+    [label setBackgroundColor:[UIColor clearColor]];
+    [label setLineBreakMode:UILineBreakModeWordWrap];
+    [label setNumberOfLines:0];
+    [awardView addSubview:label];
+    
+    [[self view] addSubview:awardView];
+    [UIView beginAnimations:@"AwardUnlocked" context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [awardView setFrame:CGRectMake(0, 420, 320, 60)];
+    [UIView commitAnimations];
+    [self performSelector:@selector(hideAwardNotification:) withObject:awardView afterDelay:4.0];
+}
+
+- (void)hideAwardNotification:(UIView *)awardView {
+    [UIView beginAnimations:@"AwardUnlockHide" context:awardView];
+    [UIView setAnimationDelegate:self];
+    [UIView setAnimationDidStopSelector:@selector(awardNotificationGone:finished:context:)];
+    [awardView setFrame:CGRectMake(0, 480, 320, 60)];
+    [UIView commitAnimations];
+}
+
+- (void)awardNotificationGone:(NSString *)animationID finished:(NSNumber *)finished context:(UIView *)awardView {
+    [awardView removeFromSuperview];
+    [awardView release];
 }
 
 #pragma mark UIAlertViewDelegate
