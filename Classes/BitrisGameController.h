@@ -70,6 +70,7 @@ typedef enum {
 - (void)unlockAward:(NSInteger)awardID;
 - (void)hideAwardNotification:(UIView *)awardView;
 - (void)awardNotificationGone:(NSString *)animationID finished:(NSNumber *)finished context:(UIView *)awardView;
+- (void)skipPiece;
 - (IBAction)showMenu;
 - (IBAction)showHighScores;
 - (IBAction)retry;

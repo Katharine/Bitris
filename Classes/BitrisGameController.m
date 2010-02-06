@@ -167,6 +167,7 @@
     } else {
         [thisPieceView clear];
         currentPiece = nil;
+        [self gameOver];
     }
 }
 
@@ -378,6 +379,12 @@
     }
 }
 
+- (void)skipPiece {
+    if(isPaused) return;
+    [self stopTimer];
+    [self missedPiece];
+}
+
 #pragma mark UIAlertViewDelegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -396,6 +403,8 @@
     [numberFormatter setGroupingSeparator:@","];
     [numberFormatter setUsesGroupingSeparator:YES];
     [gameBoard setDelegate:self];
+    [timerView setDelegate:self];
+    [timerView setSelector:@selector(skipPiece)];
     allPieces = [[self loadBitrisPieces] retain];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause) name:UIApplicationWillResignActiveNotification object:nil];
     [self resetGame];
@@ -468,15 +477,11 @@
             [gameBoard renderBoardWithAnimation:board];
             [self updateScore:score];
         }
-        if([remainingPieces count] > 0) {
-            [self pickNextPiece];
-        } else {
-            [self gameOver];
-        }
+        [self pickNextPiece];
     } else {
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
-        [gameBoard clearPreview];
     }
+    [gameBoard clearPreview];
 }
 
 - (void)movedFromCellNumber:(ushort)oldCell toCellNumber:(ushort)newCell {

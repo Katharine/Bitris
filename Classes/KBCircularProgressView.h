@@ -8,12 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-
 @interface KBCircularProgressView : UIView {
     float progress;
+    id delegate;
+    SEL selector;
 }
+
+@property(assign) id delegate;
+@property SEL selector;
 
 - (void)setProgress:(float)newProgress;
 - (float)progress;
 
 @end
+
