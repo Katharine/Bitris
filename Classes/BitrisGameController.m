@@ -249,7 +249,7 @@
 }
 
 - (void)gameOver {
-    // Do something useful here.
+    isPaused = YES;
     [self stopTimer];
     [thisPieceView clear];
     [nextPieceView clear];
@@ -265,7 +265,6 @@
     }
     NSLog(@"gameOver");
     AgonEndGameSession();
-    isPaused = YES; // Otherwise the pause screen comes up...
     [finalScoreView setText:stringScore];
     [gameOverView setAlpha:0.0];
     [[self view] addSubview:gameOverView];
@@ -450,11 +449,13 @@
 #pragma mark BitrisBoardDelegate
 
 - (void)touchedCellNumber:(ushort)cell {
+    if(isPaused) return;
     cell = [self guessIntendedCellForPiece:currentPiece atCell:cell];
     [gameBoard previewPiece:currentPiece atCell:cell];
 }
 
 - (void)confirmedCellNumber:(ushort)cell {
+    if(isPaused) return;
     cell = [self guessIntendedCellForPiece:currentPiece atCell:cell];
     NSInteger bitmask = [currentPiece getBitmaskForCell:cell];
     if(ON_BOARD(bitmask) && ([gameBoard currentBoard] & bitmask) == 0) {
@@ -476,16 +477,17 @@
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
         [gameBoard clearPreview];
     }
-
 }
 
 - (void)movedFromCellNumber:(ushort)oldCell toCellNumber:(ushort)newCell {
+    if(isPaused) return;
     newCell = [self guessIntendedCellForPiece:currentPiece atCell:newCell];
     [gameBoard clearPreview];
     [gameBoard previewPiece:currentPiece atCell:newCell];
 }
 
 - (void)abandonedCell:(ushort)cell {
+    if(isPaused) return;
     [gameBoard clearPreview];
 }
 
