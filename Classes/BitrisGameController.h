@@ -41,6 +41,8 @@ typedef enum {
     IBOutlet BitrisPieceView *nextNextPieceView;
     IBOutlet UILabel *scoreView;
     IBOutlet KBCircularProgressView *timerView;
+    IBOutlet UILabel *finalScoreView;
+    IBOutlet UIView *gameOverView;
     NSMutableArray *remainingPieces;
     NSArray *allPieces;
     BitrisPiece *currentPiece;
@@ -49,6 +51,8 @@ typedef enum {
     NSDate *timerEndTime;
     BitrisGameType gameType;
     float pauseTimeRemaining;
+    BOOL isPaused;
+    NSNumberFormatter *numberFormatter;
 }
 
 - (ushort)guessIntendedCellForPiece:(BitrisPiece *)piece atCell:(ushort)cell;
@@ -59,7 +63,6 @@ typedef enum {
 - (void)missedPiece;
 - (void)updateScore:(NSInteger)delta;
 - (void)pickNextPiece;
-- (void)showMenu;
 - (void)gameOver;
 - (void)fillRemainingPieces;
 - (void)pause;
@@ -67,6 +70,9 @@ typedef enum {
 - (void)unlockAward:(NSInteger)awardID;
 - (void)hideAwardNotification:(UIView *)awardView;
 - (void)awardNotificationGone:(NSString *)animationID finished:(NSNumber *)finished context:(UIView *)awardView;
+- (IBAction)showMenu;
+- (IBAction)showHighScores;
+- (IBAction)retry;
 
 @property(retain) IBOutlet BitrisBoardView *gameBoard;
 @property(retain) IBOutlet BitrisPieceView *thisPieceView;
@@ -74,5 +80,9 @@ typedef enum {
 @property(retain) IBOutlet BitrisPieceView *nextNextPieceView;
 @property(retain) IBOutlet UILabel *scoreView;
 @property(retain) IBOutlet KBCircularProgressView *timerView;
+
+@property(retain) IBOutlet UIView *gameOverView;
+@property(retain) IBOutlet UILabel *finalScoreView;
+
 @property BitrisGameType gameType;
 @end

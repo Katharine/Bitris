@@ -11,6 +11,15 @@
 @implementation BitrisBoardView
 @synthesize cells, currentBoard, delegate;
 
+- (void)clear {
+    for(int i = 0; i < 25; ++i) {
+        BitrisCellView *cell = [cells objectAtIndex:i];
+        [cell setAlpha:1.0];
+        [cell setBackgroundColor:[UIColor lightGrayColor]];
+    }
+    currentBoard = 0;
+    currentCell = 0;
+}
 
 - (void)createSubviews {
     CGRect frame = [self frame];

@@ -12,7 +12,7 @@
 
 @implementation BitrisGameController
 @synthesize gameBoard, thisPieceView, nextPieceView, nextNextPieceView, scoreView, timerView;
-@synthesize gameType;
+@synthesize gameType, finalScoreView, gameOverView;
 
 #pragma mark Stuff
 
@@ -131,7 +131,7 @@
 
 - (void)updateScore:(NSInteger)delta {
     currentScore += delta;
-    [[self scoreView] setText:[[NSNumber numberWithInteger:currentScore] stringValue]];
+    [[self scoreView] setText:[numberFormatter stringFromNumber:[NSNumber numberWithInteger:currentScore]]];
     if(gameType == BitrisGameClassic) {
         if(currentScore >= 100) {
             [self unlockAward:AWARD_CLASSIC_100];
@@ -254,18 +254,26 @@
     [thisPieceView clear];
     [nextPieceView clear];
     [nextNextPieceView clear];
+    NSString *stringScore = [numberFormatter stringFromNumber:[NSNumber numberWithInteger:currentScore]];
     switch(gameType) {
         case BitrisGameClassic:
-            AgonSubmitIntegerScore(currentScore, [[NSNumber numberWithInteger:currentScore] stringValue], SCOREBOARD_CLASSIC);
-            AgonShowLeaderboard(SCOREBOARD_CLASSIC, YES);
+            AgonSubmitIntegerScore(currentScore, stringScore, SCOREBOARD_CLASSIC);
             break;
         case BitrisGameEndless:
-            AgonSubmitIntegerScore(currentScore, [[NSNumber numberWithInteger:currentScore] stringValue], SCOREBOARD_ENDLESS);
-            AgonShowLeaderboard(SCOREBOARD_ENDLESS, YES);
+            AgonSubmitIntegerScore(currentScore, stringScore, SCOREBOARD_ENDLESS);
             break;
     }
     NSLog(@"gameOver");
     AgonEndGameSession();
+    isPaused = YES; // Otherwise the pause screen comes up...
+    [finalScoreView setText:stringScore];
+    [gameOverView setAlpha:0.0];
+    [[self view] addSubview:gameOverView];
+    [UIView beginAnimations:@"ShowGameOver" context:nil];
+    [UIView setAnimationDuration:1.5];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [gameOverView setAlpha:1.0];
+    [UIView commitAnimations];
 }
 
 - (void)showMenu {
@@ -275,11 +283,9 @@
     [self release];
 }
 
-- (void)agonDidHide {
-    [self showMenu];
-}
-
 - (void)pause {
+    if(isPaused) return;
+    isPaused = YES;
     [pieceTimer invalidate];
     pieceTimer = nil;
     pauseTimeRemaining = [timerEndTime timeIntervalSinceNow];
@@ -294,6 +300,8 @@
 }
 
 - (void)unpause {
+    if(!isPaused) return;
+    isPaused = NO;
     [self startTimer];
     [timerEndTime release];
     timerEndTime = [[NSDate dateWithTimeIntervalSinceNow:pauseTimeRemaining] retain];
@@ -340,6 +348,37 @@
     [awardView release];
 }
 
+- (void)resetGame {
+    isPaused = NO;
+    currentScore = 0;
+    [scoreView setText:@"0"];
+    [gameBoard clear];
+    remainingPieces = nil;
+    [self fillRemainingPieces];
+    AgonStartGameSession();
+    [[self timerView] setProgress:1.0];
+    [self pickNextPiece];
+}
+
+- (void)retry {
+    [self resetGame];
+    [UIView beginAnimations:@"HideGameOver" context:nil];
+    [UIView setAnimationDelegate:gameOverView];
+    [UIView setAnimationDidStopSelector:@selector(removeFromSuperview)];
+    [UIView setAnimationDuration:1.5];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+    [gameOverView setAlpha:0.0];
+    [UIView commitAnimations];
+}
+
+- (IBAction)showHighScores {
+    if(gameType == BitrisGameClassic) {
+        AgonShowLeaderboard(SCOREBOARD_CLASSIC, NO);
+    } else if(gameType == BitrisGameEndless) {
+        AgonShowLeaderboard(SCOREBOARD_ENDLESS, NO);
+    }
+}
+
 #pragma mark UIAlertViewDelegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -353,16 +392,14 @@
 #pragma mark UIViewController
 
 - (void)viewDidAppear:(BOOL)animated {
-    currentScore = 0;
-    remainingPieces = nil;
+    numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setGroupingSize:3];
+    [numberFormatter setGroupingSeparator:@","];
+    [numberFormatter setUsesGroupingSeparator:YES];
     [gameBoard setDelegate:self];
     allPieces = [[self loadBitrisPieces] retain];
-    [self fillRemainingPieces];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(agonDidHide) name:AGONDidHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause) name:UIApplicationWillResignActiveNotification object:nil];
-    AgonStartGameSession();
-    [[self timerView] setProgress:1.0];
-    [self pickNextPiece];
+    [self resetGame];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -381,6 +418,8 @@
     self.nextNextPieceView = nil;
     self.scoreView = nil;
     self.timerView = nil;
+    self.finalScoreView = nil;
+    self.gameOverView = nil;
 }
 
 
@@ -391,10 +430,15 @@
     [gameBoard release];
     [allPieces release];
     [remainingPieces release];
+    [numberFormatter release];
+    
     [thisPieceView release];
     [nextPieceView release];
     [nextNextPieceView release];
     [scoreView release];
+    [finalScoreView release];
+    [gameOverView release];
+    
     [super dealloc];
 }
 

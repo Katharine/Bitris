@@ -27,5 +27,5 @@
 
 
 BitrisPiece* BitrisPieceMake(NSInteger bitmask, ushort offset) {
-    return [[BitrisPiece alloc] initWithBitmask:bitmask andOffset:offset];
+    return [[[BitrisPiece alloc] initWithBitmask:bitmask andOffset:offset] autorelease];
 }

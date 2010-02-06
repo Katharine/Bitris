@@ -25,6 +25,7 @@
 - (BOOL)previewPiece:(BitrisPiece *)piece atCell:(ushort)cell;
 - (void)clearPreviewOfPiece:(BitrisPiece *)piece atCell:(ushort)cell;
 - (void)clearPreview;
+- (void)clear;
 
 @property(assign) NSArray *cells;
 @property(readonly) NSUInteger currentBoard;

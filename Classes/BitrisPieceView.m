@@ -18,8 +18,8 @@
     int width = frame.size.width / 3;
     int height = frame.size.height / 3;
     for(i = 0; i < 9; ++i) {
-        BitrisCellView *cell = [[BitrisCellView alloc] initWithFrame:
-                                CGRectMake((i % 3) * width, (i / 3) * height, width, height)];
+        BitrisCellView *cell = [[[BitrisCellView alloc] initWithFrame:
+                                CGRectMake((i % 3) * width, (i / 3) * height, width, height)] autorelease];
         [cell setCellNumber:i];
         [self addSubview:cell];
         [mutableCells addObject:cell];
@@ -83,6 +83,7 @@
 
 
 - (void)dealloc {
+    [cells release];
     [super dealloc];
 }
 
