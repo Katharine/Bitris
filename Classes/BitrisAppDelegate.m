@@ -14,6 +14,7 @@
 
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
+    srandomdev();
     if(!AgonCreate(@"2D93FFBE4ECA914C356E87EB53D8E4DDF4B46888", AgonDeveloperServers)) {
         NSLog(@"AGON initialisation failed.");
     } else {

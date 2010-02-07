@@ -7,10 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BitrisCellView.h"
-#import "BitrisBoardDelegate.h"
-#import "BitrisPiece.h"
-
+@class BitrisPiece, BitrisBoardDelegate;
+@protocol BitrisBoardDelegate;
 
 @interface BitrisBoardView : UIView {
     NSArray *cells;

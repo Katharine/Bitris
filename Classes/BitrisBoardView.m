@@ -7,6 +7,9 @@
 //
 
 #import "BitrisBoardView.h"
+#import "BitrisCellView.h"
+#import "BitrisBoardDelegate.h"
+#import "BitrisPiece.h"
 
 @implementation BitrisBoardView
 @synthesize cells, currentBoard, delegate;

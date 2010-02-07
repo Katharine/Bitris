@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GameKit/GameKit.h>
 #import "AGON.h"
-#import "BitrisGameController.h"
 
-@interface MainMenuController : UIViewController {
+@interface MainMenuController : UIViewController <GKPeerPickerControllerDelegate> {
     IBOutlet UILabel *accountLabel;
 }
 
@@ -22,7 +22,8 @@
 - (IBAction)showAwards;
 - (IBAction)changeAccount;
 - (IBAction)editProfile;
+- (IBAction)startMultiplayerGame;
 - (void)profileChanged;
-- (void)startGameOfType:(BitrisGameType)gameType;
+- (void)startGameWithController:(Class)gameType;
 
 @end

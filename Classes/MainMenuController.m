@@ -7,24 +7,26 @@
 //
 
 #import "MainMenuController.h"
+#import "BitrisGameController.h"
+#import "BitrisEndlessGameController.h"
+#import "BitrisClassicGameController.h"
 
 @implementation MainMenuController
 @synthesize accountLabel;
 
-- (void)startGameOfType:(BitrisGameType)gameType {
-    BitrisGameController *gameScreen = [[BitrisGameController alloc] initWithNibName:@"MainGame" bundle:nil];
-    [gameScreen setGameType:gameType];
+- (void)startGameWithController:(Class)gameController {
+    BitrisGameController *gameScreen = [[gameController alloc] initWithNibName:@"MainGame" bundle:nil];
     [[[self view] superview] addSubview:[gameScreen view]];
     [[self view] removeFromSuperview];
     [self release];
 }
 
 - (IBAction)startClassicGame {
-    [self startGameOfType:BitrisGameClassic];
+    [self startGameWithController:[BitrisClassicGameController class]];
 }
 
 - (IBAction)startEndlessGame {
-    [self startGameOfType:BitrisGameEndless];
+    [self startGameWithController:[BitrisEndlessGameController class]];
 }
 
 - (IBAction)showLeaderboards {
@@ -42,6 +44,33 @@
 - (IBAction)editProfile {
     AgonShow(AgonBladeProfile, NO);
 }
+
+- (IBAction)startMultiplayerGame {
+    GKPeerPickerController *picker = [[GKPeerPickerController alloc] init];
+    picker.delegate = self;
+    [picker show];
+}
+
+#pragma mark GKPeerPickerControllerDelegate
+
+- (void)peerPickerControllerDidCancel:(GKPeerPickerController *)picker {
+    picker.delegate = nil;
+    [picker release];
+}
+
+- (void)peerPickerController:(GKPeerPickerController *)picker didConnectPeer:(NSString *)peerID toSession:(GKSession *)session {
+    // Show multiplayer menu.
+    picker.delegate = nil;
+    [picker dismiss];
+    [picker release];
+}
+
+- (GKSession *)peerPickerController:(GKPeerPickerController *)picker sessionForConnectionType:(GKPeerPickerConnectionType)type {
+    GKSession *session = [[GKSession alloc] initWithSessionID:nil displayName:AgonGetActiveProfileUserName() sessionMode:GKSessionModePeer];
+    return [session autorelease];
+}
+
+#pragma mark UIViewController
 
 - (void)viewWillAppear:(BOOL)animated {
     [self profileChanged];

@@ -8,15 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import <AudioToolbox/AudioToolbox.h>
-#import "BitrisBoardView.h"
-#import "BitrisPieceView.h"
-#import "KBCircularProgressView.h"
 #import "AGON.h"
-
-typedef enum {
-    BitrisGameClassic,
-    BitrisGameEndless
-} BitrisGameType;
+#import "BitrisBoardDelegate.h"
+@class KBCircularProgressView, BitrisPiece, BitrisPieceView, BitrisBoardView;
 
 #define TIME_LIMIT 10.0
 #define SCORE_2x2 5
@@ -49,13 +43,11 @@ typedef enum {
     NSInteger currentScore;
     NSTimer *pieceTimer;
     NSDate *timerEndTime;
-    BitrisGameType gameType;
     float pauseTimeRemaining;
     BOOL isPaused;
     NSNumberFormatter *numberFormatter;
 }
 
-- (ushort)guessIntendedCellForPiece:(BitrisPiece *)piece atCell:(ushort)cell;
 - (NSArray *)loadBitrisPieces;
 - (void)startTimer;
 - (void)stopTimer;
@@ -71,6 +63,7 @@ typedef enum {
 - (void)hideAwardNotification:(UIView *)awardView;
 - (void)awardNotificationGone:(NSString *)animationID finished:(NSNumber *)finished context:(UIView *)awardView;
 - (void)skipPiece;
+- (void)submitScore;
 - (IBAction)showMenu;
 - (IBAction)showHighScores;
 - (IBAction)retry;
@@ -85,5 +78,4 @@ typedef enum {
 @property(retain) IBOutlet UIView *gameOverView;
 @property(retain) IBOutlet UILabel *finalScoreView;
 
-@property BitrisGameType gameType;
 @end

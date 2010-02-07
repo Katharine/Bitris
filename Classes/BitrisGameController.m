@@ -8,40 +8,17 @@
 
 #import "BitrisGameController.h"
 #import "MainMenuController.h"
+#import "BitrisBoardView.h"
+#import "BitrisPieceView.h"
+#import "KBCircularProgressView.h"
+#import "BitrisPiece.h"
 
 
 @implementation BitrisGameController
 @synthesize gameBoard, thisPieceView, nextPieceView, nextNextPieceView, scoreView, timerView;
-@synthesize gameType, finalScoreView, gameOverView;
+@synthesize finalScoreView, gameOverView;
 
 #pragma mark Stuff
-
-- (ushort)guessIntendedCellForPiece:(BitrisPiece *)piece atCell:(ushort)cell {
-    // Stuff this.
-    /*
-    NSInteger positionedPiece = PIECE_TO_BOARD(piece, cell);
-    NSLog(@"%i", positionedPiece);
-    if(!ON_BOARD(positionedPiece)) {
-        if(positionedPiece < 0 || (positionedPiece & ~VALID_CELLS) != 0) {
-            if(cell <= 5) {
-                cell += 5;
-            } else if(cell > 20) {
-                cell -= 5;
-            }
-        }
-        positionedPiece = PIECE_TO_BOARD(piece, cell);
-        if(STRADDLING_EDGES(positionedPiece)) {
-            if(cell % 5 == 0) {
-                cell -= 1;
-            } else {
-                cell += 1;
-            }
-        }
-    }
-    return cell;
-     */
-    return cell;
-}
 
 - (NSArray *)loadBitrisPieces {
     return [NSArray arrayWithObjects:
@@ -118,31 +95,13 @@
 }
 
 - (void)missedPiece {
-    switch(gameType) {
-        case BitrisGameClassic:
-            [self updateScore:-7];
-            [self pickNextPiece];
-            break;
-        case BitrisGameEndless:
-            [self gameOver];
-            break;
-    }
+    [self updateScore:-7];
+    [self pickNextPiece];
 }
 
 - (void)updateScore:(NSInteger)delta {
     currentScore += delta;
     [[self scoreView] setText:[numberFormatter stringFromNumber:[NSNumber numberWithInteger:currentScore]]];
-    if(gameType == BitrisGameClassic) {
-        if(currentScore >= 100) {
-            [self unlockAward:AWARD_CLASSIC_100];
-        }
-        if(currentScore >= 200) {
-            [self unlockAward:AWARD_CLASSIC_200];
-        }
-        if(currentScore >= 300) {
-            [self unlockAward:AWARD_CLASSIC_300];
-        }
-    }
 }
 
 - (void)pickNextPiece {
@@ -150,9 +109,6 @@
         currentPiece = [remainingPieces lastObject];
         [thisPieceView displayPiece:currentPiece];
         [remainingPieces removeLastObject];
-        if(gameType == BitrisGameEndless && [remainingPieces count] < 2) {
-            [self fillRemainingPieces];
-        }
         if([remainingPieces count] > 0) {
             [nextPieceView displayPiece:[remainingPieces lastObject]];
             if([remainingPieces count] > 1) {
@@ -255,18 +211,10 @@
     [thisPieceView clear];
     [nextPieceView clear];
     [nextNextPieceView clear];
-    NSString *stringScore = [numberFormatter stringFromNumber:[NSNumber numberWithInteger:currentScore]];
-    switch(gameType) {
-        case BitrisGameClassic:
-            AgonSubmitIntegerScore(currentScore, stringScore, SCOREBOARD_CLASSIC);
-            break;
-        case BitrisGameEndless:
-            AgonSubmitIntegerScore(currentScore, stringScore, SCOREBOARD_ENDLESS);
-            break;
-    }
+    [self submitScore];
     NSLog(@"gameOver");
     AgonEndGameSession();
-    [finalScoreView setText:stringScore];
+    [finalScoreView setText:[numberFormatter stringFromNumber:[NSNumber numberWithInteger:currentScore]]];
     [gameOverView setAlpha:0.0];
     [[self view] addSubview:gameOverView];
     [UIView beginAnimations:@"ShowGameOver" context:nil];
@@ -274,6 +222,10 @@
     [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
     [gameOverView setAlpha:1.0];
     [UIView commitAnimations];
+}
+
+- (void)submitScore {
+    AgonSubmitIntegerScore(currentScore, [numberFormatter stringFromNumber:[NSNumber numberWithInteger:currentScore]], SCOREBOARD_CLASSIC);
 }
 
 - (void)showMenu {
@@ -372,11 +324,7 @@
 }
 
 - (IBAction)showHighScores {
-    if(gameType == BitrisGameClassic) {
-        AgonShowLeaderboard(SCOREBOARD_CLASSIC, NO);
-    } else if(gameType == BitrisGameEndless) {
-        AgonShowLeaderboard(SCOREBOARD_ENDLESS, NO);
-    }
+    AgonShowLeaderboard(SCOREBOARD_CLASSIC, NO);
 }
 
 - (void)skipPiece {
@@ -459,13 +407,11 @@
 
 - (void)touchedCellNumber:(ushort)cell {
     if(isPaused) return;
-    cell = [self guessIntendedCellForPiece:currentPiece atCell:cell];
     [gameBoard previewPiece:currentPiece atCell:cell];
 }
 
 - (void)confirmedCellNumber:(ushort)cell {
     if(isPaused) return;
-    cell = [self guessIntendedCellForPiece:currentPiece atCell:cell];
     NSInteger bitmask = [currentPiece getBitmaskForCell:cell];
     if(ON_BOARD(bitmask) && ([gameBoard currentBoard] & bitmask) == 0) {
         NSInteger board = ([gameBoard currentBoard] | bitmask);
@@ -486,7 +432,6 @@
 
 - (void)movedFromCellNumber:(ushort)oldCell toCellNumber:(ushort)newCell {
     if(isPaused) return;
-    newCell = [self guessIntendedCellForPiece:currentPiece atCell:newCell];
     [gameBoard clearPreview];
     [gameBoard previewPiece:currentPiece atCell:newCell];
 }

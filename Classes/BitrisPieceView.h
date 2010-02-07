@@ -7,9 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "BitrisCellView.h"
-#import "BitrisPiece.h"
-
+@class BitrisPiece;
 
 @interface BitrisPieceView : UIView {
     BitrisPiece *currentPiece;

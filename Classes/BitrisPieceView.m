@@ -7,6 +7,8 @@
 //
 
 #import "BitrisPieceView.h"
+#import "BitrisCellView.h"
+#import "BitrisPiece.h"
 
 
 @implementation BitrisPieceView

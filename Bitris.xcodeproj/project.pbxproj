@@ -27,11 +27,15 @@
 		8905644A111A055C00778331 /* libstdc++.6.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 89056449111A055C00778331 /* libstdc++.6.dylib */; };
 		890564B0111A0A5700778331 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 890564AF111A0A5700778331 /* CoreLocation.framework */; };
 		890565CC111A2D2400778331 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 890565CB111A2D2400778331 /* MainMenu.xib */; };
+		89726904111F085E00BE7ACB /* BitrisEndlessGameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89726903111F085E00BE7ACB /* BitrisEndlessGameController.m */; };
+		89726909111F361500BE7ACB /* BitrisClassicGameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89726908111F361500BE7ACB /* BitrisClassicGameController.m */; };
 		8978F2E51114E4EA000B3DE8 /* BitrisBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8978F2E41114E4EA000B3DE8 /* BitrisBoardView.m */; };
 		8978F2F61114E5DA000B3DE8 /* BitrisCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8978F2F51114E5DA000B3DE8 /* BitrisCellView.m */; };
 		8978F4FC11151317000B3DE8 /* BitrisGameController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8978F4FB11151317000B3DE8 /* BitrisGameController.m */; };
 		89A5CDE5111CD97D005B6EFD /* AgonPackage.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 89A5CDE4111CD97D005B6EFD /* AgonPackage.bundle */; };
 		89A5CE55111CDA6F005B6EFD /* ScoreViewGradient.png in Resources */ = {isa = PBXBuildFile; fileRef = 89A5CE54111CDA6F005B6EFD /* ScoreViewGradient.png */; };
+		89A5CEA6111DD5E9005B6EFD /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89A5CEA5111DD5E9005B6EFD /* GameKit.framework */; };
+		89A5CF89111E05CD005B6EFD /* NetworkMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89A5CF88111E05CD005B6EFD /* NetworkMenu.xib */; };
 		89E8634E11176C2A0023F829 /* BitrisPiece.m in Sources */ = {isa = PBXBuildFile; fileRef = 89E8634D11176C2A0023F829 /* BitrisPiece.m */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +66,10 @@
 		89056449111A055C00778331 /* libstdc++.6.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.6.dylib"; path = "usr/lib/libstdc++.6.dylib"; sourceTree = SDKROOT; };
 		890564AF111A0A5700778331 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		890565CB111A2D2400778331 /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
+		89726902111F085E00BE7ACB /* BitrisEndlessGameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitrisEndlessGameController.h; sourceTree = "<group>"; };
+		89726903111F085E00BE7ACB /* BitrisEndlessGameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitrisEndlessGameController.m; sourceTree = "<group>"; };
+		89726907111F361500BE7ACB /* BitrisClassicGameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitrisClassicGameController.h; sourceTree = "<group>"; };
+		89726908111F361500BE7ACB /* BitrisClassicGameController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitrisClassicGameController.m; sourceTree = "<group>"; };
 		8978F2E31114E4EA000B3DE8 /* BitrisBoardView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitrisBoardView.h; sourceTree = "<group>"; };
 		8978F2E41114E4EA000B3DE8 /* BitrisBoardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitrisBoardView.m; sourceTree = "<group>"; };
 		8978F2F41114E5DA000B3DE8 /* BitrisCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitrisCellView.h; sourceTree = "<group>"; };
@@ -72,6 +80,8 @@
 		8978F6E3111535A2000B3DE8 /* BitrisPiece.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BitrisPiece.h; sourceTree = "<group>"; };
 		89A5CDE4111CD97D005B6EFD /* AgonPackage.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AgonPackage.bundle; sourceTree = "<group>"; };
 		89A5CE54111CDA6F005B6EFD /* ScoreViewGradient.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ScoreViewGradient.png; sourceTree = "<group>"; };
+		89A5CEA5111DD5E9005B6EFD /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
+		89A5CF88111E05CD005B6EFD /* NetworkMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NetworkMenu.xib; sourceTree = "<group>"; };
 		89E8634D11176C2A0023F829 /* BitrisPiece.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BitrisPiece.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Bitris-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Bitris-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -93,6 +103,7 @@
 				8905644A111A055C00778331 /* libstdc++.6.dylib in Frameworks */,
 				890564B0111A0A5700778331 /* CoreLocation.framework in Frameworks */,
 				34F62661111B086100A4DB02 /* AudioToolbox.framework in Frameworks */,
+				89A5CEA6111DD5E9005B6EFD /* GameKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,6 +161,7 @@
 				8D1107310486CEB800E47090 /* Bitris-Info.plist */,
 				345941921119A07F005DD556 /* MainGame.xib */,
 				890565CB111A2D2400778331 /* MainMenu.xib */,
+				89A5CF88111E05CD005B6EFD /* NetworkMenu.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -157,6 +169,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				89A5CEA5111DD5E9005B6EFD /* GameKit.framework */,
 				34F62660111B086100A4DB02 /* AudioToolbox.framework */,
 				890564AF111A0A5700778331 /* CoreLocation.framework */,
 				89056433111A054000778331 /* AddressBook.framework */,
@@ -187,6 +200,10 @@
 				89E8634D11176C2A0023F829 /* BitrisPiece.m */,
 				34593DB111182B55005DD556 /* BitrisPieceView.h */,
 				34593DB211182B55005DD556 /* BitrisPieceView.m */,
+				89726902111F085E00BE7ACB /* BitrisEndlessGameController.h */,
+				89726903111F085E00BE7ACB /* BitrisEndlessGameController.m */,
+				89726907111F361500BE7ACB /* BitrisClassicGameController.h */,
+				89726908111F361500BE7ACB /* BitrisClassicGameController.m */,
 			);
 			name = MainGame;
 			sourceTree = "<group>";
@@ -250,6 +267,7 @@
 				890565CC111A2D2400778331 /* MainMenu.xib in Resources */,
 				89A5CDE5111CD97D005B6EFD /* AgonPackage.bundle in Resources */,
 				89A5CE55111CDA6F005B6EFD /* ScoreViewGradient.png in Resources */,
+				89A5CF89111E05CD005B6EFD /* NetworkMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -269,6 +287,8 @@
 				34593DB311182B55005DD556 /* BitrisPieceView.m in Sources */,
 				3459402F11197B36005DD556 /* KBCircularProgressView.m in Sources */,
 				345941981119A13F005DD556 /* MainMenuController.m in Sources */,
+				89726904111F085E00BE7ACB /* BitrisEndlessGameController.m in Sources */,
+				89726909111F361500BE7ACB /* BitrisClassicGameController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
