@@ -61,7 +61,7 @@
             "name": "Rectangular"
         }, 
         {
-            "description": "Made a three by three block", 
+            "description": "Created a 3x3 block", 
             "resource_id": 3, 
             "clue": "", 
             "secret": false, 
@@ -71,6 +71,16 @@
             "name": "Three squared"
         }, 
         {
+            "description": "Created a clear depiction of the hacker emblem.", 
+            "resource_id": 7, 
+            "clue": "", 
+            "secret": true, 
+            "score": 20, 
+            "order": 2, 
+            "id": 6, 
+            "name": "Benign Hacker"
+        }, 
+        {
             "description": "Score at least 100 points in Classic mode.", 
             "resource_id": 4, 
             "clue": "", 
@@ -78,7 +88,7 @@
             "score": 20, 
             "order": 3, 
             "id": 3, 
-            "name": "First blocks"
+            "name": "Novice"
         }, 
         {
             "description": "Score at least 200 points in Classic mode.", 
@@ -91,7 +101,7 @@
             "name": "Hobbyist"
         }, 
         {
-            "description": "A master of the game!\r\nScored at least 300 points in Classic mode.", 
+            "description": "Score at least 300 points in Classic mode.", 
             "resource_id": 6, 
             "clue": "", 
             "secret": false, 
@@ -136,6 +146,11 @@
             "is_localized": false, 
             "id": 6, 
             "name": "Award-300-classic"
+        }, 
+        {
+            "is_localized": false, 
+            "id": 7, 
+            "name": "Award-Hacker"
         }
     ]
 }

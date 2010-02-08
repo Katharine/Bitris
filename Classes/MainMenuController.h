@@ -23,6 +23,7 @@
 - (IBAction)changeAccount;
 - (IBAction)editProfile;
 - (IBAction)startMultiplayerGame;
+- (IBAction)startDebugGame;
 - (void)profileChanged;
 - (void)startGameWithController:(Class)gameType;
 

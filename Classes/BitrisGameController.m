@@ -150,6 +150,12 @@
         while(tempBoard != 0) {
             int tBits = -1;
             int tScore = 0;
+            if(currentScore >= 0 && (tempBoard & MASK_HACKER) == MASK_HACKER && (~tempBoard & MASK_HACKER_INVERSE) == MASK_HACKER_INVERSE) {
+                int t = MASK_HACKER << i;
+                if(!STRADDLING_EDGES(t)) {
+                    [self unlockAward:AWARD_MADE_HACKER];
+                }
+            }
             if((tempBoard & MASK_3x3) == MASK_3x3) {
                 int t = MASK_3x3 << i;
                 if(!STRADDLING_EDGES(t)) {

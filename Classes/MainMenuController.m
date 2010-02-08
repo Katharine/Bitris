@@ -10,6 +10,7 @@
 #import "BitrisGameController.h"
 #import "BitrisEndlessGameController.h"
 #import "BitrisClassicGameController.h"
+#import "BitrisPieceDebugGameController.h"
 
 @implementation MainMenuController
 @synthesize accountLabel;
@@ -27,6 +28,10 @@
 
 - (IBAction)startEndlessGame {
     [self startGameWithController:[BitrisEndlessGameController class]];
+}
+
+- (IBAction)startDebugGame {
+    [self startGameWithController:[BitrisPieceDebugGameController class]];
 }
 
 - (IBAction)showLeaderboards {

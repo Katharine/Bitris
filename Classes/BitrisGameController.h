@@ -20,6 +20,7 @@
 #define AWARD_MADE_2x2 0
 #define AWARD_MADE_2x3 1
 #define AWARD_MADE_3x3 2
+#define AWARD_MADE_HACKER 6
 
 #define AWARD_CLASSIC_100 3
 #define AWARD_CLASSIC_200 4
