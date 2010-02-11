@@ -247,6 +247,7 @@
     [pieceTimer invalidate];
     pieceTimer = nil;
     pauseTimeRemaining = [timerEndTime timeIntervalSinceNow];
+    [gameBoard hide];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Paused"
                                message:nil
                               delegate:self
@@ -260,6 +261,7 @@
 - (void)unpause {
     if(!isPaused) return;
     isPaused = NO;
+    [gameBoard unhide];
     [self startTimer];
     [timerEndTime release];
     timerEndTime = [[NSDate dateWithTimeIntervalSinceNow:pauseTimeRemaining] retain];

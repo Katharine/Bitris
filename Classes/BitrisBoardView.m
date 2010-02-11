@@ -174,6 +174,23 @@
     }
 }
 
+- (void)hide {
+    [self setBackgroundColor:[UIColor grayColor]];
+    [UIView beginAnimations:@"hideboard" context:nil];
+    for(NSInteger i = 0; i < 25; ++i) {
+        [(BitrisCellView *)[cells objectAtIndex:i] setAlpha:0.0];
+    }
+    [UIView commitAnimations];
+}
+
+- (void)unhide {
+    [UIView beginAnimations:@"unhideboard" context:nil];
+    for(NSInteger i = 0; i < 25; ++i) {
+        [(BitrisCellView *)[cells objectAtIndex:i] setAlpha:1.0];
+    }
+    [UIView commitAnimations];
+}
+
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self createSubviews];
