@@ -11,10 +11,6 @@
 
 @implementation BitrisEndlessGameController
 
-- (IBAction)showHighScores {
-    AgonShowLeaderboard(SCOREBOARD_ENDLESS, NO);
-}
-
 - (void)skipPiece {
     [self pause];
 }
@@ -23,8 +19,8 @@
     [self gameOver];
 }
 
-- (void)submitScore {
-    AgonSubmitIntegerScore(currentScore, [numberFormatter stringFromNumber:[NSNumber numberWithInteger:currentScore]], SCOREBOARD_ENDLESS);
+- (NSString *)leaderboardType {
+    return LEADERBOARD_ENDLESS;
 }
 
 - (void)pickNextPiece {

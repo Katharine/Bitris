@@ -20,6 +20,8 @@
     [[[self view] superview] addSubview:[gameScreen view]];
     [[self view] removeFromSuperview];
     [self release];
+    [gameScreen prepare];
+    [gameScreen resetGame];
 }
 
 - (IBAction)startClassicGame {
@@ -35,25 +37,39 @@
 }
 
 - (IBAction)showLeaderboards {
-    AgonShow(AgonBladeLeaderboards, YES);
+    GKLeaderboardViewController *leaderboard = [[GKLeaderboardViewController alloc] init];
+    if(leaderboard != nil) {
+        leaderboard.leaderboardDelegate = self;
+        [self presentModalViewController:leaderboard animated:YES];
+    }
+    [leaderboard release];
 }
 
-- (IBAction)showAwards {
-    AgonShow(AgonBladeAwards, YES);
-}
-
-- (IBAction)changeAccount {
-    AgonShowProfilePicker();
-}
-
-- (IBAction)editProfile {
-    AgonShow(AgonBladeProfile, NO);
+- (IBAction)showAchievements {
+    GKAchievementViewController *achievements = [[GKAchievementViewController alloc] init];
+    if(achievements != nil) {
+        achievements.achievementDelegate = self;
+        [self presentModalViewController:achievements animated:YES];
+    }
+    [achievements release];
 }
 
 - (IBAction)startMultiplayerGame {
     GKPeerPickerController *picker = [[GKPeerPickerController alloc] init];
     picker.delegate = self;
     [picker show];
+}
+
+#pragma mark GKLeaderboardViewControllerDelegate
+
+- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)leaderboard {
+    [leaderboard dismissModalViewControllerAnimated:YES];
+}
+
+#pragma mark GKAchievementViewControllerDelegate
+
+- (void)achievementViewControllerDidFinish:(GKAchievementViewController *)viewController {
+    [viewController dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark GKPeerPickerControllerDelegate
@@ -71,19 +87,22 @@
 }
 
 - (GKSession *)peerPickerController:(GKPeerPickerController *)picker sessionForConnectionType:(GKPeerPickerConnectionType)type {
-    GKSession *session = [[GKSession alloc] initWithSessionID:nil displayName:AgonGetActiveProfileUserName() sessionMode:GKSessionModePeer];
+    NSString *displayName = [[GKLocalPlayer localPlayer] alias];
+    GKSession *session = [[GKSession alloc] initWithSessionID:nil displayName:displayName sessionMode:GKSessionModePeer];
     return [session autorelease];
+}
+
+- (void)updateGKButtons {
+    GKLocalPlayer *player = [GKLocalPlayer localPlayer];
+    [achievementsButton setEnabled:[player isAuthenticated]];
+    [highScoreButton setEnabled:[player isAuthenticated]];
 }
 
 #pragma mark UIViewController
 
-- (void)viewWillAppear:(BOOL)animated {
-    [self profileChanged];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(profileChanged) name:AGONProfileChangedNotification object:nil];
-}
-
-- (void)profileChanged {
-    [accountLabel setText:[NSString stringWithFormat:@"You are logged in as %@.", AgonGetActiveProfileUserName(),nil]];
+- (void)viewDidAppear:(BOOL)animated {
+    [self updateGKButtons];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateGKButtons) name:@"GKAuthenticationChanged" object:nil];
 }
 
 - (void)didReceiveMemoryWarning {

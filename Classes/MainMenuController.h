@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <GameKit/GameKit.h>
-#import "AGON.h"
 
-@interface MainMenuController : UIViewController <GKPeerPickerControllerDelegate> {
-    IBOutlet UILabel *accountLabel;
+@interface MainMenuController : UIViewController <GKPeerPickerControllerDelegate, GKAchievementViewControllerDelegate, GKLeaderboardViewControllerDelegate> {
+    IBOutlet UIButton *highScoreButton;
+    IBOutlet UIButton *achievementsButton;
 }
 
 @property(retain) IBOutlet UILabel *accountLabel;
@@ -19,12 +19,9 @@
 - (IBAction)startClassicGame;
 - (IBAction)startEndlessGame;
 - (IBAction)showLeaderboards;
-- (IBAction)showAwards;
-- (IBAction)changeAccount;
-- (IBAction)editProfile;
+- (IBAction)showAchievements;
 - (IBAction)startMultiplayerGame;
 - (IBAction)startDebugGame;
-- (void)profileChanged;
 - (void)startGameWithController:(Class)gameType;
 
 @end

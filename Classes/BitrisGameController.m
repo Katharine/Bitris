@@ -12,6 +12,7 @@
 #import "BitrisPieceView.h"
 #import "KBCircularProgressView.h"
 #import "BitrisPiece.h"
+#import "KBGameCenter.h"
 
 
 @implementation BitrisGameController
@@ -219,7 +220,6 @@
     [nextNextPieceView clear];
     [self submitScore];
     NSLog(@"gameOver");
-    AgonEndGameSession();
     [finalScoreView setText:[numberFormatter stringFromNumber:[NSNumber numberWithInteger:currentScore]]];
     [gameOverView setAlpha:0.0];
     [[self view] addSubview:gameOverView];
@@ -230,8 +230,14 @@
     [UIView commitAnimations];
 }
 
+- (NSString *)leaderboardType {
+    return LEADERBOARD_CLASSIC;
+}
+
 - (void)submitScore {
-    AgonSubmitIntegerScore(currentScore, [numberFormatter stringFromNumber:[NSNumber numberWithInteger:currentScore]], SCOREBOARD_CLASSIC);
+    GKScore *scoreReporter = [[[GKScore alloc] initWithCategory:[self leaderboardType]] autorelease];
+    scoreReporter.value = currentScore;
+    [[KBGameCenter shared] submitScore:scoreReporter];
 }
 
 - (void)showMenu {
@@ -267,45 +273,9 @@
     timerEndTime = [[NSDate dateWithTimeIntervalSinceNow:pauseTimeRemaining] retain];
 }
 
-- (void)unlockAward:(NSInteger)awardID {
-    if(AgonIsAwardWithIdUnlocked(awardID)) return;
-    AgonUnlockAwardWithId(awardID);
-    UIView *awardView = [[UIView alloc] initWithFrame:CGRectMake(0, 480, 320, 60)];
-    [awardView setBackgroundColor:[UIColor lightGrayColor]];
-    UIImage *image = AgonGetAwardImageWithId(awardID);
-    NSString *text = AgonGetAwardTitleWithId(awardID);
-    
-    UIImageView *imageView = [[[UIImageView alloc] initWithImage:image] autorelease];
-    [imageView setFrame:CGRectMake(0, 0, 60, 60)];
-    [awardView addSubview:imageView];
-    
-    UILabel *label = [[[UILabel alloc] initWithFrame:CGRectMake(80, 5, 220, 50)] autorelease];
-    [label setText:[NSString stringWithFormat:@"Award unlocked!\n%@\n\n\n", text, nil]];
-    [label setFont:[UIFont fontWithName:@"Helvetica-Bold" size:13.0]];
-    [label setBackgroundColor:[UIColor clearColor]];
-    [label setLineBreakMode:UILineBreakModeWordWrap];
-    [label setNumberOfLines:0];
-    [awardView addSubview:label];
-    
-    [[self view] addSubview:awardView];
-    [UIView beginAnimations:@"AwardUnlocked" context:nil];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [awardView setFrame:CGRectMake(0, 420, 320, 60)];
-    [UIView commitAnimations];
-    [self performSelector:@selector(hideAwardNotification:) withObject:awardView afterDelay:4.0];
-}
-
-- (void)hideAwardNotification:(UIView *)awardView {
-    [UIView beginAnimations:@"AwardUnlockHide" context:awardView];
-    [UIView setAnimationDelegate:self];
-    [UIView setAnimationDidStopSelector:@selector(awardNotificationGone:finished:context:)];
-    [awardView setFrame:CGRectMake(0, 480, 320, 60)];
-    [UIView commitAnimations];
-}
-
-- (void)awardNotificationGone:(NSString *)animationID finished:(NSNumber *)finished context:(UIView *)awardView {
-    [awardView removeFromSuperview];
-    [awardView release];
+- (void)unlockAward:(NSString *)awardID {
+    if([[KBGameCenter shared] hasAchievement:awardID]) return;
+    [[KBGameCenter shared] unlockAchievement:awardID];
 }
 
 - (void)resetGame {
@@ -315,7 +285,6 @@
     [gameBoard clear];
     remainingPieces = nil;
     [self fillRemainingPieces];
-    AgonStartGameSession();
     [[self timerView] setProgress:1.0];
     [self pickNextPiece];
 }
@@ -331,14 +300,26 @@
     [UIView commitAnimations];
 }
 
-- (IBAction)showHighScores {
-    AgonShowLeaderboard(SCOREBOARD_CLASSIC, NO);
+- (void)showHighScores {
+    GKLeaderboardViewController *leaderboard = [[GKLeaderboardViewController alloc] init];
+    if(leaderboard != nil) {
+        leaderboard.leaderboardDelegate = self;
+        leaderboard.category = self.leaderboardType;
+        [self presentModalViewController:leaderboard animated:YES];
+    }
+    [leaderboard release];
 }
 
 - (void)skipPiece {
     if(isPaused) return;
     [self stopTimer];
     [self missedPiece];
+}
+
+#pragma mark GKLeaderboardViewControllerDelegate
+
+- (void)leaderboardViewControllerDidFinish:(GKLeaderboardViewController *)controller {
+    [self dismissModalViewControllerAnimated:YES];
 }
 
 #pragma mark UIAlertViewDelegate
@@ -353,6 +334,11 @@
 
 #pragma mark UIViewController
 
+- (void)prepare {
+    allPieces = [[self loadBitrisPieces] retain];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause) name:UIApplicationWillResignActiveNotification object:nil];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setGroupingSize:3];
@@ -361,9 +347,6 @@
     [gameBoard setDelegate:self];
     [timerView setDelegate:self];
     [timerView setSelector:@selector(skipPiece)];
-    allPieces = [[self loadBitrisPieces] retain];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pause) name:UIApplicationWillResignActiveNotification object:nil];
-    [self resetGame];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <GameKit/GameKit.h>
 #import <AudioToolbox/AudioToolbox.h>
-#import "AGON.h"
 #import "BitrisBoardDelegate.h"
 @class KBCircularProgressView, BitrisPiece, BitrisPieceView, BitrisBoardView;
 
@@ -17,19 +17,19 @@
 #define SCORE_2x3 15
 #define SCORE_3x3 30
 
-#define AWARD_MADE_2x2 0
-#define AWARD_MADE_2x3 1
-#define AWARD_MADE_3x3 2
-#define AWARD_MADE_HACKER 6
+#define AWARD_MADE_2x2 @"bitris.type.2x2"
+#define AWARD_MADE_2x3 @"bitris.type.2x3"
+#define AWARD_MADE_3x3 @"bitris.type.3x3"
+#define AWARD_MADE_HACKER @"bitris.shape.hacker"
 
-#define AWARD_CLASSIC_100 3
-#define AWARD_CLASSIC_200 4
-#define AWARD_CLASSIC_300 5
+#define AWARD_CLASSIC_100 @"bitris.score.100"
+#define AWARD_CLASSIC_200 @"bitris.score.200"
+#define AWARD_CLASSIC_300 @"bitris.score.300"
 
-#define SCOREBOARD_CLASSIC 0
-#define SCOREBOARD_ENDLESS 1
+#define LEADERBOARD_CLASSIC @"bitris.classic"
+#define LEADERBOARD_ENDLESS @"bitris.endless"
 
-@interface BitrisGameController : UIViewController <BitrisBoardDelegate, UIAlertViewDelegate> {
+@interface BitrisGameController : UIViewController <BitrisBoardDelegate, UIAlertViewDelegate, GKLeaderboardViewControllerDelegate> {
     IBOutlet BitrisBoardView *gameBoard;
     IBOutlet BitrisPieceView *thisPieceView;
     IBOutlet BitrisPieceView *nextPieceView;
@@ -60,11 +60,11 @@
 - (void)fillRemainingPieces;
 - (void)pause;
 - (void)unpause;
-- (void)unlockAward:(NSInteger)awardID;
-- (void)hideAwardNotification:(UIView *)awardView;
-- (void)awardNotificationGone:(NSString *)animationID finished:(NSNumber *)finished context:(UIView *)awardView;
+- (void)unlockAward:(NSString *)awardID;
 - (void)skipPiece;
 - (void)submitScore;
+- (void)resetGame;
+- (void)prepare;
 - (IBAction)showMenu;
 - (IBAction)showHighScores;
 - (IBAction)retry;

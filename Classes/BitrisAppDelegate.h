@@ -7,12 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "AGON.h"
 #import "MainMenuController.h"
 
 @interface BitrisAppDelegate : NSObject <UIApplicationDelegate> {
     UIWindow *window;
+    NSString *playerID;
 }
+
+- (void)authenticateLocalPlayer;
 
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 
